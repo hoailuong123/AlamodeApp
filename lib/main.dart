@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+// import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'core/app_export.dart';
-
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
 void main() {
