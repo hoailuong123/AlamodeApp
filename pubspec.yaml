@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.6 <4.0.0'
+  sdk: '>=3.2.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -34,9 +34,21 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.2
   english_words: ^4.0.0
   provider: ^6.0.0  
+  cached_network_image: ^3.3.0
+  flutter_svg: ^2.0.9
+  flutter_rating_bar: ^4.0.1
+  country_pickers: ^2.0.0
+  pin_code_fields: ^8.0.1
+  responsive_grid_list: ^1.4.0
+  carousel_slider_plus: ^7.0.0
+  flutter_svg_provider: ^1.0.7
+  smooth_page_indicator: ^1.1.0
+  connectivity_plus: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -50,7 +62,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+# following page: ts:https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -59,6 +71,36 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+  - assets/
+  - assets/images/
+  fonts:
+  - family: Raleway
+    fonts:
+      - asset: assets/fonts/RalewayBold.tt
+        weight: 700
+      - asset: assets/fonts/RalewayMedium.tt
+        weight: 500
+      - asset: assets/fonts/RalewaySemiBold.ttf
+        weight: 600
+      - asset: assets/fonts/RalewayExtraBold.ttf
+        weight: 800
+      - asset: assets/fonts/RalewayRegular.ttf
+        weight: 400 
+  - family: Nunito Sans
+    fonts:
+      - asset: assets/fonts/NunitoSansLight.ttf
+        weight: 300
+      - asset: assets/fonts/NunitoSansRegular.ttf
+        weight: 400
+      - asset: assets/fonts/NunitoSansBold.ttf 
+        weight: 700
+      - asset: assets/fonts/NunitoSansSemiBold.ttf 
+        weight: 600
+  - family: Poppins 
+    fonts:
+      - asset: assets/fonts/PoppinsMedium.ttf 
+        weight: 500
 
   # To add assets to your application, add an assets section, like this:
   # assets:
