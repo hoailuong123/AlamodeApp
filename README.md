@@ -25,7 +25,7 @@ samples, guidance on mobile development, and a full API reference.
     Check the UI of all the app screens from a single place by setting up the 'initialRoute' to AppNavigation in the AppRoutes.dart file
 
 # Application structure
-
+```bash
 .
 ├── android                    - It contains files required to run the application on an Android platform.
 ├── assets                     - It contains all images and fonts of your application.
@@ -40,7 +40,8 @@ samples, guidance on mobile development, and a full API reference.
   ├── routes                 - It contains all the routes of the application
   └── theme                  - It contains app theme and decoration classes
   └── widgets                - It contains all custom widget classes
-  
+```
+
 # Running the App
     1. Fetch necessary dependencies using flutter pub get.
     2. Start the application with flutter run.
