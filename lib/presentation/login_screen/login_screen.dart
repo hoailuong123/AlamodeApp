@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '/core/app_export.dart';
 import '../../widgets/custom_elevated_button.dart';
 
-
 // ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -25,7 +24,7 @@ class LoginScreen extends StatelessWidget {
             color: theme.colorScheme.onErrorContainer,
             image: DecorationImage(
               image: AssetImage(
-                ImageConstant.imageLogin,
+                ImageConstant.imgLogin,
               ),
               fit: BoxFit.fill,
             ),
@@ -100,7 +99,6 @@ class LoginScreen extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(18.h, 14.h, 18.h, 12.h),
             borderDecoration: TextFormFieldStyleHelper.fillGray,
             fillColor: appTheme.gray5001,
-
             validator: (value) {
               if (value!.isEmpty) {
                 return "Please enter your email";
@@ -120,7 +118,8 @@ class LoginScreen extends StatelessWidget {
             text: "Cancel",
             height: 60.h,
             buttonStyle: CustomButtonStyles.fillGray,
-            buttonTextStyle: CustomTextStyles.titleMediumIndigo200,)
+            buttonTextStyle: CustomTextStyles.titleMediumIndigo200,
+          )
         ],
       ),
     );
