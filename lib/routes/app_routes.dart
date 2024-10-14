@@ -49,7 +49,7 @@ class AppRoutes {
    static Map<String, Widget Function(BuildContext)> routes = {
     // startScreen: (context) => StartScreen(),
     // createAccountScreen: (context) => CreateAccountScreen(),
-    // loginScreen: (context) => LoginScreen(),
+    loginScreen: (context) => LoginScreen(),
     // passwordScreen: (context) => PasswordScreen(),
     // passwordTypingScreen: (context) => PasswordTypingScreen(),
     // fullProfilePage: (context) => FullProfilePage(),
@@ -74,6 +74,6 @@ class AppRoutes {
     // paymentMethodsHistoryScreen: (context) => PaymentMethodsHistoryScreen(),
     // shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
-    // initialRoute: (context) => StartScreen(),
+    initialRoute: (context) => LoginScreen(),
   };
 }
