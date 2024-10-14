@@ -266,4 +266,6 @@ class LightCodeColors {
 
   Color get yellow80002 => Color(0xFFF1811C);
   Color get yellow80003 => Color(0xFFECA618);
+
+  get white => null;
 }
