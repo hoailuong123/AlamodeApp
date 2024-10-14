@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../presentation/app_navigation_screen/app_navigation_screen.dart';
 import '../presentation/login_screen/login_screen.dart';
+import '../presentation/start_screen/start_screen.dart';
 
 class AppRoutes {
   static const String startScreen = '/';
@@ -33,7 +34,7 @@ class AppRoutes {
   static const String initialRoute = '/initialRoute';
   
    static Map<String, Widget Function(BuildContext)> routes = {
-    // startScreen: (context) => StartScreen(),
+    startScreen: (context) => StartScreen(),
     // createAccountScreen: (context) => CreateAccountScreen(),
     loginScreen: (context) => LoginScreen(),
     // passwordScreen: (context) => PasswordScreen(),
@@ -60,6 +61,6 @@ class AppRoutes {
     // paymentMethodsHistoryScreen: (context) => PaymentMethodsHistoryScreen(),
     // shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
-    initialRoute: (context) => LoginScreen(),
+    initialRoute: (context) => StartScreen(),
   };
 }

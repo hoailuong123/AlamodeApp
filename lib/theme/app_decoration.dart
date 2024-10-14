@@ -105,3 +105,9 @@ class AppDecoration {
       );
 }
 
+class BorderRadiusStyle {
+  //rounded border radius
+  static BorderRadius get roundedBorder66 => BorderRadius.circular(
+        66.h,
+      );
+}
