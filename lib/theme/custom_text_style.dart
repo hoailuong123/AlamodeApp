@@ -38,6 +38,9 @@ class CustomTextStyles {
           color: appTheme.gray10001,
           fontSize: 22.fSize,
           fontWeight: FontWeight.w300);
+  static TextStyle get titleSmall15 => theme.textTheme.titleSmall!.copyWith(
+        fontSize: 15.fSize,
+      );
 
   // text style
   static TextStyle get Gray5001 => TextStyle(
