@@ -1,20 +1,6 @@
 import 'package:flutter/material.dart';
 import '../presentation/app_navigation_screen/app_navigation_screen.dart';
-import '../presentation/cart_empty_shown_from_wishlist_screen/cart_empty_shown_from_wishlist_screen.dart';
-import '../presentation/categories_filter_screen/categories_filter_screen.dart';
-import '../presentation/create_account_screen/create_account_screen.dart';
-import '../presentation/delivered_screen/delivered_screen.dart';
-import '../presentation/filter_screen/filter_screen.dart';
-import '../presentation/image_search_screen/image_search_screen.dart';
 import '../presentation/login_screen/login_screen.dart';
-import '../presentation/payment_methods_history_screen/payment_methods_history_screen.dart';
-import '../presentation/product_full_screen/product_full_screen.dart';
-import '../presentation/search_screen/search_screen.dart';
-import '../presentation/settings_full_screen/settings_full_screen.dart';
-import '../presentation/shipping_address_screen/shipping_address_screen.dart';
-import '../presentation/to_receive_progress_screen/to_receive_progress_screen.dart';
-import '../presentation/wishlist_empty_screen/wishlist_empty_screen.dart';
-import '../presentation/to_receive_screen/to_receive_screen.dart';
 
 class AppRoutes {
   static const String startScreen = '/';

@@ -160,7 +160,7 @@ class TextThemes {
 
 class ColorSchemes {
   static final lightCodeColorScheme = ColorScheme.light(
-    primary: Color(0XFF04CFF),
+    primary: Color(0x0ff04cff),
     primaryContainer: Color(0XFFF4F4F4),
     errorContainer: Color(0XFF003BE3),
     onError: Color(0XFFFF3333),
@@ -242,7 +242,7 @@ class LightCodeColors {
   Color get orangeA700 => Color(0xFFFF5F00);
 
   // Pink
-  Color get pink300 => Color(0xFFF5790);
+  Color get pink300 => Color(0x0fff5790);
 
   Color get pink400 => Color(0xFFF34075);
 
@@ -253,7 +253,7 @@ class LightCodeColors {
   Color get red200 => Color(0xFFD97474);
   Color get red300 => Color(0xFFF1AEAE);
 
-  Color get red50 => Color(0xFFFEBEB);
+  Color get red50 => Color(0x0fffebeb);
 
   Color get redA400 => Color(0xFFF81140);
   Color get redA700 => Color(0xFFEB0018);

@@ -61,7 +61,7 @@ class NoInternetException implements Exception {
       globalMessengerKey.currentState!
           .showSnackBar(SnackBar(content: Text(message)));
     }
-    this._message = message;
+    _message = message;
   }
 
   @override

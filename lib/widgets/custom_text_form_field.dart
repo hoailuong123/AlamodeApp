@@ -135,7 +135,7 @@ class CustomTextFormField extends StatelessWidget {
         focusedBorder: (borderDecoration ??
                 OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.h),
-                ))!
+                ))
             .copyWith(
           borderSide: BorderSide(color: appTheme.indigo200),
         ),
