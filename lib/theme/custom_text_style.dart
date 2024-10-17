@@ -40,6 +40,10 @@ class CustomTextStyles {
         fontSize: 16.fSize,
         fontWeight: FontWeight.w500,
       );
+  static TextStyle get titleSmallMedium => theme.textTheme.titleSmall!.copyWith(
+        fontWeight: FontWeight.w500,
+      );
+  static get titleMedium_1 => theme.textTheme.titleMedium!;
   static TextStyle get titleSmallPoppinsBluegray100 =>
       theme.textTheme.titleSmall!.poppins.copyWith(
         color: appTheme.blueGray100,
@@ -53,6 +57,12 @@ class CustomTextStyles {
   static TextStyle get titleSmall15 => theme.textTheme.titleSmall!.copyWith(
         fontSize: 15.fSize,
       );
+  static TextStyle get titleMediumOnErrorContainer =>
+    theme.textTheme.titleMedium!.copyWith(
+      color: theme.colorScheme.onErrorContainer,
+      fontSize: 16.fSize,
+      fontWeight: FontWeight.w500,
+    );
 
   // text style
   static TextStyle get Gray5001 => TextStyle(
