@@ -28,6 +28,18 @@ class CustomTextStyles {
         fontSize: 16.fSize,
         fontWeight: FontWeight.w500,
       );
+  static TextStyle get titleMediumBlue800 =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.blue800,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w500,
+      );
+  static TextStyle get titleMediumGray400 =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.gray400,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w500,
+      );
   static TextStyle get titleSmallPoppinsBluegray100 =>
       theme.textTheme.titleSmall!.poppins.copyWith(
         color: appTheme.blueGray100,
