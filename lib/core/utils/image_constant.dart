@@ -7,4 +7,5 @@ class ImageConstant {
   static String iconCam = '$imagePath/Icon Camera.png';
   static String iconBtnLeft = '$imagePath/button_left.png';
   static String iconBag = '$imagePath/img_bag.png';
+  static String imgEllipse = '$imagePath/img_ellipse.svg';
 }
