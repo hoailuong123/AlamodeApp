@@ -8,4 +8,6 @@ class ImageConstant {
   static String iconBtnLeft = '$imagePath/button_left.png';
   static String iconBag = '$imagePath/img_bag.png';
   static String imgEllipse = '$imagePath/img_ellipse.svg';
+  static String imgArrow = '$imagePath/img_arrow.svg';
+  static String imgGroup1950 = '$imagePath/img_group_1950.svg';
 }
