@@ -38,6 +38,7 @@ extension IconButtonStyleHelper on CustomIconButton {
         color: appTheme.indigo50,
         borderRadius: BorderRadius.circular(16.h),
       );
+  static BoxDecoration get none => BoxDecoration();
 }
 
 class CustomIconButton extends StatelessWidget {
@@ -64,8 +65,7 @@ class CustomIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return alignment != null
         ? Align(
-            alignment: alignment ?? Alignment.center,
-            child: iconButtonWidget)
+            alignment: alignment ?? Alignment.center, child: iconButtonWidget)
         : iconButtonWidget;
   }
 
