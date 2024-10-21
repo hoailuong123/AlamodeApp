@@ -22,12 +22,38 @@ extension on TextStyle {
 }
 
 class CustomTextStyles {
+  static TextStyle get titleLarge20 =>
+      theme.textTheme.titleLarge!.copyWith(
+        fontSize: 20.fSize,
+      );
   static TextStyle get titleMediumIndigo200 =>
       theme.textTheme.titleMedium!.copyWith(
         color: appTheme.indigo200,
         fontSize: 16.fSize,
         fontWeight: FontWeight.w500,
       );
+  static TextStyle get titleMediumBlue800 =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.blue800,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w500,
+      );
+  static TextStyle get titleMediumBlack900Medium16 =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w500,
+      );
+  static TextStyle get titleMediumGray400 =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.gray400,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w500,
+      );
+  static TextStyle get titleSmallMedium => theme.textTheme.titleSmall!.copyWith(
+        fontWeight: FontWeight.w500,
+      );
+  static get titleMedium_1 => theme.textTheme.titleMedium!;
   static TextStyle get titleSmallPoppinsBluegray100 =>
       theme.textTheme.titleSmall!.poppins.copyWith(
         color: appTheme.blueGray100,
@@ -38,6 +64,15 @@ class CustomTextStyles {
           color: appTheme.gray10001,
           fontSize: 22.fSize,
           fontWeight: FontWeight.w300);
+  static TextStyle get titleSmall15 => theme.textTheme.titleSmall!.copyWith(
+        fontSize: 15.fSize,
+      );
+  static TextStyle get titleMediumOnErrorContainer =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: theme.colorScheme.onErrorContainer,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w500,
+      );
 
   // text style
   static TextStyle get Gray5001 => TextStyle(
@@ -134,7 +169,10 @@ class CustomTextStyles {
   static TextStyle get labelLargeBold_1 => theme.textTheme.labelLarge!.copyWith(
         fontWeight: FontWeight.w700,
       );
-
+  static TextStyle get labelLargeNunitoSansBlack900SemiBold => theme.textTheme.labelLarge!.nunitoSans.copyWith(
+        color: appTheme.black900,
+        fontWeight: FontWeight.w600,
+      ); 
   static TextStyle get labelLargeNunitoSans =>
       theme.textTheme.labelLarge!.nunitoSans.copyWith(
         fontSize: 12.fSize,
