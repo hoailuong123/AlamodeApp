@@ -119,6 +119,9 @@ class LoginScreen extends StatelessWidget {
             height: 60.h,
             buttonStyle: CustomButtonStyles.fillGray,
             buttonTextStyle: CustomTextStyles.titleMediumIndigo200,
+            onPressed: () => {
+               Navigator.pushNamed(context, AppRoutes.startScreen)
+            },
           )
         ],
       ),

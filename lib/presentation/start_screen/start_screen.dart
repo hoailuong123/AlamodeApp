@@ -62,28 +62,36 @@ class StartScreen extends StatelessWidget {
                   text: "Let's get started",
                   buttonStyle: CustomButtonStyles.fillPrimary,
                   buttonTextStyle: CustomTextStyles.titleLargeNunitoSansGray10001,
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.createAccountScreen);
+                  },
                 ),
                 SizedBox(height: 14.h),
                 Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      // Xử lý khi người dùng nhấn vào
-                    },
-                    child: Text(
-                      "I already have an account",
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color:Color(0xFF9EB4EB), 
+                    TextButton(
+                      onPressed: () {
+                         Navigator.pushNamed(context, AppRoutes.loginScreen);
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min, 
+                        children: [
+                          Text(
+                            "I already have an account",
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: Color(0xFF9EB4EB),
+                            ),
+                          ),
+                          SizedBox(width: 8), 
+                          CustomImageView(
+                            imagePath: ImageConstant.iconBtnLeft,
+                            height: 32,
+                            width: 32,
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  CustomImageView(
-                    imagePath: ImageConstant.iconBtnLeft,
-                    height: 32,
-                    width: 32,
-                  )
                   ],
                 ),
               ],
