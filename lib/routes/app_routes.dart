@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../presentation/app_navigation_screen/app_navigation_screen.dart';
 import '../presentation/login_screen/login_screen.dart';
+import '../presentation/create_account_screen/create_account_screen.dart';
 import '../presentation/start_screen/start_screen.dart';
 import '../presentation/shipping_address_screen/shipping_address_screen.dart';
 
@@ -36,7 +37,7 @@ class AppRoutes {
   
    static Map<String, Widget Function(BuildContext)> routes = {
     startScreen: (context) => StartScreen(),
-    // createAccountScreen: (context) => CreateAccountScreen(),
+    createAccountScreen: (context) => CreateAccountScreen(),
     loginScreen: (context) => LoginScreen(),
     // passwordScreen: (context) => PasswordScreen(),
     // passwordTypingScreen: (context) => PasswordTypingScreen(),

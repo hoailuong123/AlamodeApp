@@ -14,7 +14,8 @@ class CustomPhoneNumber extends StatelessWidget {
     Key? key,
     required this.country,
     required this.onTap,
-    required this.controller,
+    required this.controller, 
+    required TextInputType keyboardType,
   }) : super(key: key);
 
 
@@ -68,6 +69,7 @@ class CustomPhoneNumber extends StatelessWidget {
                 autofocus: true,
                 controller: controller,
                 style: CustomTextStyles.titleSmallPoppinsBluegray100,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   hintText: "Your number",
                   hintStyle: CustomTextStyles.titleSmallPoppinsBluegray100,
