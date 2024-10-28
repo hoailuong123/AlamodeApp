@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../presentation/app_navigation_screen/app_navigation_screen.dart';
 import '../presentation/login_screen/login_screen.dart';
 import '../presentation/start_screen/start_screen.dart';
+import '../presentation/shipping_address_screen/shipping_address_screen.dart';
 
 class AppRoutes {
   static const String startScreen = '/';
@@ -59,8 +60,8 @@ class AppRoutes {
     // settingsProfileScreen: (context) => SettingsProfileScreen(),
     // settingsAddCardScreen: (context) => SettingsAddCardScreen(),
     // paymentMethodsHistoryScreen: (context) => PaymentMethodsHistoryScreen(),
-    // shippingAddressScreen: (context) => ShippingAddressScreen(),
+    shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
-    initialRoute: (context) => StartScreen(),
+    initialRoute: (context) => ShippingAddressScreen(),
   };
 }
