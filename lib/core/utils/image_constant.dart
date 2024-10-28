@@ -10,4 +10,8 @@ class ImageConstant {
   static String imgEllipse = '$imagePath/img_ellipse.svg';
   static String imgArrow = '$imagePath/img_arrow.svg';
   static String imgGroup1950 = '$imagePath/img_group_1950.svg';
+  static String imgFavoritePrimary = '$imagePath/img_favorite_primary.svg';
+  static String imgCategories = '$imagePath/img_categories.svg';
+  static String imgBagPrimary = '$imagePath/img_bag_primary.svg';
+  static String imgLockPrimary = '$imagePath/img_lock_primary.svg';
 }
