@@ -10,4 +10,9 @@ class ImageConstant {
   static String imgEllipse = '$imagePath/img_ellipse.svg';
   static String imgArrow = '$imagePath/img_arrow.svg';
   static String imgGroup1950 = '$imagePath/img_group_1950.svg';
+  static String imgFlag = '$imagePath/img_flag.png';
+  static String imgPw = '$imagePath/img_password.png';
+  static String imageBgCreateAccount = '$imagePath/create_account.png';
+  static String imgCamera = '$imagePath/img_camera.png';
+  
 }
