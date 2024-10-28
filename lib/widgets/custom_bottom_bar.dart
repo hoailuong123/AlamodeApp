@@ -1,11 +1,8 @@
-// ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
-
 import '../core/app_export.dart';
 
 enum BottomBarEnum { loremipsumdolor3, loremipsumdolorsitametconsectetur }
 
-// ignore_for_file: must_be_immutable
 class CustomBottomBar extends StatefulWidget {
   CustomBottomBar({this.onChanged});
 
@@ -15,7 +12,6 @@ class CustomBottomBar extends StatefulWidget {
   CustomBottomBarState createState() => CustomBottomBarState();
 }
 
-// ignore_for_file: must_be_immutable
 class CustomBottomBarState extends State<CustomBottomBar> {
   int selectedIndex = 0;
 
@@ -23,27 +19,22 @@ class CustomBottomBarState extends State<CustomBottomBar> {
     BottomMenuModel(
         icon: ImageConstant.imgGroup1950,
         activeIcon: ImageConstant.imgGroup1950,
-        title: "Lorem ipsum dolor sit amet consectetur",
         type: BottomBarEnum.loremipsumdolorsitametconsectetur),
     BottomMenuModel(
         icon: ImageConstant.imgFavoritePrimary,
         activeIcon: ImageConstant.imgFavoritePrimary,
-        title: "Lorem ipsum dolor sit amet consectetur",
         type: BottomBarEnum.loremipsumdolor3),
     BottomMenuModel(
         icon: ImageConstant.imgCategories,
         activeIcon: ImageConstant.imgCategories,
-        title: "Lorem ipsum dolor sit amet consectetur",
         type: BottomBarEnum.loremipsumdolor3),
     BottomMenuModel(
         icon: ImageConstant.imgBagPrimary,
         activeIcon: ImageConstant.imgBagPrimary,
-        title: "Lorem ipsum dolor sit amet consectetur",
         type: BottomBarEnum.loremipsumdolor3),
     BottomMenuModel(
         icon: ImageConstant.imgLockPrimary,
         activeIcon: ImageConstant.imgLockPrimary,
-        title: "Lorem ipsum dolor sit amet consectetur",
         type: BottomBarEnum.loremipsumdolorsitametconsectetur),
   ];
 
@@ -58,10 +49,7 @@ class CustomBottomBarState extends State<CustomBottomBar> {
             color: Color(0X29000000),
             spreadRadius: 2.h,
             blurRadius: 2.h,
-            offset: Offset(
-              0,
-              -1,
-            ),
+            offset: Offset(0, -1),
           ),
         ],
       ),
@@ -76,6 +64,7 @@ class CustomBottomBarState extends State<CustomBottomBar> {
         items: List.generate(bottomMenuList.length, (index) {
           return BottomNavigationBarItem(
             icon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomImageView(
@@ -85,36 +74,39 @@ class CustomBottomBarState extends State<CustomBottomBar> {
                   color: Color(0XFF004CFF),
                 ),
                 SizedBox(height: 5.5.h),
-                SizedBox(
-                  width: 116.2.h,
-                  child: Text(
-                    bottomMenuList[index].title ?? '',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Color(0XFF000000),
-                      fontSize: 12.fSize,
-                      fontFamily: 'Nunito Sans',
-                      fontWeight: FontWeight.w400,
-                    ),
+                Text(
+                  bottomMenuList[index].title ?? '',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0XFF000000),
+                    fontSize: 12.fSize,
+                    fontFamily: 'Nunito Sans',
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
             ),
-            activeIcon: CustomImageView(
-              imagePath: bottomMenuList[index].activeIcon,
-              height: 30.h,
-              width: 26.h,
-              color: Color(0XFF000000),
+            activeIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomImageView(
+                  imagePath: bottomMenuList[index].activeIcon,
+                  height: 30.h,
+                  width: 26.h,
+                  color: Color(0XFF000000),
+                ),
+              ],
             ),
             label: '',
           );
         }),
         onTap: (index) {
-          selectedIndex = index;
-          widget.onChanged?.call(bottomMenuList[index].type);
           setState(() {
+            selectedIndex = index;
           });
+          widget.onChanged?.call(bottomMenuList[index].type);
         },
       ),
     );

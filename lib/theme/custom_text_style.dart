@@ -22,8 +22,7 @@ extension on TextStyle {
 }
 
 class CustomTextStyles {
-  static TextStyle get titleLarge20 =>
-      theme.textTheme.titleLarge!.copyWith(
+  static TextStyle get titleLarge20 => theme.textTheme.titleLarge!.copyWith(
         fontSize: 20.fSize,
       );
   static TextStyle get titleMediumIndigo200 =>
@@ -44,11 +43,24 @@ class CustomTextStyles {
         fontSize: 16.fSize,
         fontWeight: FontWeight.w500,
       );
+  static TextStyle get titleMediumBlack900Medium_2 =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900,
+        fontWeight: FontWeight.w500,
+      );
+
   static TextStyle get titleMediumGray400 =>
       theme.textTheme.titleMedium!.copyWith(
         color: appTheme.gray400,
         fontSize: 16.fSize,
         fontWeight: FontWeight.w500,
+      );
+
+  static TextStyle get titleMediumNunitoSansBlack900 =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w600,
       );
   static TextStyle get titleSmallMedium => theme.textTheme.titleSmall!.copyWith(
         fontWeight: FontWeight.w500,
@@ -64,6 +76,10 @@ class CustomTextStyles {
           color: appTheme.gray10001,
           fontSize: 22.fSize,
           fontWeight: FontWeight.w300);
+
+  static TextStyle get titleLargeExtraBold => theme.textTheme.titleLarge!
+      .copyWith(fontSize: 20.fSize, fontWeight: FontWeight.w800);
+
   static TextStyle get titleSmall15 => theme.textTheme.titleSmall!.copyWith(
         fontSize: 15.fSize,
       );
@@ -149,6 +165,11 @@ class CustomTextStyles {
         color: appTheme.black900,
       );
 
+  static TextStyle get labelLargeRed300 => theme.textTheme.labelLarge!.copyWith(
+        color: appTheme.red300,
+        fontSize: 20.fSize,
+        fontWeight: FontWeight.w800,
+      );
   static TextStyle get labelLargeBlack900Bold =>
       theme.textTheme.labelLarge!.copyWith(
         color: appTheme.black900,
@@ -169,10 +190,11 @@ class CustomTextStyles {
   static TextStyle get labelLargeBold_1 => theme.textTheme.labelLarge!.copyWith(
         fontWeight: FontWeight.w700,
       );
-  static TextStyle get labelLargeNunitoSansBlack900SemiBold => theme.textTheme.labelLarge!.nunitoSans.copyWith(
+  static TextStyle get labelLargeNunitoSansBlack900SemiBold =>
+      theme.textTheme.labelLarge!.nunitoSans.copyWith(
         color: appTheme.black900,
         fontWeight: FontWeight.w600,
-      ); 
+      );
   static TextStyle get labelLargeNunitoSans =>
       theme.textTheme.labelLarge!.nunitoSans.copyWith(
         fontSize: 12.fSize,

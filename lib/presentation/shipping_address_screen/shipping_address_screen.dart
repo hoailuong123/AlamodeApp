@@ -55,8 +55,8 @@ class ShippingAddressScreen extends StatelessWidget {
                   SizedBox(height: 140.h),
                   CustomElevatedButton(
                     height: 40.h,
-                    width: double.maxFinite,
                     text: "Save Changes",
+                    buttonStyle: CustomButtonStyles.fillPrimary,
                     onPressed: () {
                       // todo: implement save functionality
                     },
