@@ -4,6 +4,9 @@ import '../presentation/login_screen/login_screen.dart';
 import '../presentation/create_account_screen/create_account_screen.dart';
 import '../presentation/start_screen/start_screen.dart';
 import '../presentation/shipping_address_screen/shipping_address_screen.dart';
+import '../presentation/settings_profile_screen/settings_profile_screen.dart';
+import '../presentation/settings_full_screen/settings_full_screen.dart';
+
 
 class AppRoutes {
   static const String startScreen = '/';
@@ -23,19 +26,24 @@ class AppRoutes {
   static const String reviewsScreen = '/wishlist_screen';
   static const String recentlyViewedScreen = '/recently_viewed_screen';
   static const String cartPage = '/cart_page';
-  static const String cartEmptyShownFromWishlistScreen = '/cart_empty_shown_from_wishlist_screen';
+  static const String cartEmptyShownFromWishlistScreen =
+      '/cart_empty_shown_from_wishlist_screen';
   static const String toReceiveScreen = '/to_receive_receive_progress_screen';
   static const String myActivityScreen = '/delivered_screen';
-  static const String voucherIsGonnaExpireScreen = '/voucher_is_gonna_expire_screen';
+  static const String voucherIsGonnaExpireScreen =
+      '/voucher_is_gonna_expire_screen';
   static const String voucherTabScreen = '/vouchers_tab_page';
   static const String settingsProfileScreen = '/settings_profile_screen';
+  static const String settingsFullScreen = '/settings_full_screen';
+
   static const String settingsAddCardScreen = '/settings_add_card_screen';
-  static const String paymentMethodsHistoryScreen = '/payment_methods_history_screen';
+  static const String paymentMethodsHistoryScreen =
+      '/payment_methods_history_screen';
   static const String shippingAddressScreen = '/shipping_address_screen';
   static const String appNavigationScreen = '/app_navigation_screen';
   static const String initialRoute = '/initialRoute';
-  
-   static Map<String, Widget Function(BuildContext)> routes = {
+
+  static Map<String, Widget Function(BuildContext)> routes = {
     startScreen: (context) => StartScreen(),
     createAccountScreen: (context) => CreateAccountScreen(),
     loginScreen: (context) => LoginScreen(),
@@ -58,11 +66,12 @@ class AppRoutes {
     // myActivityScreen: (context) => MyActivityScreen(),
     // voucherIsGonnaExpireScreen: (context) => VoucherIsGonnaExpireScreen(),
     // voucherTabScreen: (context) => VoucherTabScreen(),
-    // settingsProfileScreen: (context) => SettingsProfileScreen(),
+    settingsProfileScreen: (context) => SettingsProfileScreen(),
+    settingsFullScreen: (context) => SettingsFullScreen(),
     // settingsAddCardScreen: (context) => SettingsAddCardScreen(),
     // paymentMethodsHistoryScreen: (context) => PaymentMethodsHistoryScreen(),
     shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
-    initialRoute: (context) => ShippingAddressScreen(),
+    initialRoute: (context) => AppNavigationScreen(),
   };
 }
