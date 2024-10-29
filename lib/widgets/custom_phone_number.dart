@@ -67,7 +67,9 @@ class CustomPhoneNumber extends StatelessWidget {
                 focusNode: FocusNode(),
                 autofocus: true,
                 controller: controller,
-                style: CustomTextStyles.titleSmallPoppinsBluegray100,
+                style: CustomTextStyles.titleSmallPoppinsBluegray100.copyWith(
+                  color: Colors.black,
+                ),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
                   hintText: "Your number",
@@ -115,11 +117,11 @@ class CustomPhoneNumber extends StatelessWidget {
         builder: (context) => CountryPickerDialog(
           searchInputDecoration: InputDecoration(
             hintText: 'Search...',
-            hintStyle: TextStyle(fontSize: 14.fSize),
+            hintStyle: TextStyle(fontSize: 14.fSize,),
           ),
           isSearchable: true,
           title: Text('Select your phone code',
-              style: TextStyle(fontSize: 14.fSize)),
+              style: TextStyle(fontSize: 14.fSize),),
           onValuePicked: (Country country) => onTap(country),
           itemBuilder: _buildDialogItem,
         ),
