@@ -23,27 +23,27 @@ class CustomBottomBarState extends State<CustomBottomBar> {
     BottomMenuModel(
         icon: ImageConstant.imgGroup1950,
         activeIcon: ImageConstant.imgGroup1950,
-        title: "Lorem ipsum dolor sit amet consectetur",
+        title: "",
         type: BottomBarEnum.loremipsumdolorsitametconsectetur),
     BottomMenuModel(
         icon: ImageConstant.imgFavoritePrimary,
         activeIcon: ImageConstant.imgFavoritePrimary,
-        title: "Lorem ipsum dolor sit amet consectetur",
+        title: "",
         type: BottomBarEnum.loremipsumdolor3),
     BottomMenuModel(
         icon: ImageConstant.imgCategories,
         activeIcon: ImageConstant.imgCategories,
-        title: "Lorem ipsum dolor sit amet consectetur",
+        title: "",
         type: BottomBarEnum.loremipsumdolor3),
     BottomMenuModel(
         icon: ImageConstant.imgBagPrimary,
         activeIcon: ImageConstant.imgBagPrimary,
-        title: "Lorem ipsum dolor sit amet consectetur",
+        title: "",
         type: BottomBarEnum.loremipsumdolor3),
     BottomMenuModel(
         icon: ImageConstant.imgLockPrimary,
         activeIcon: ImageConstant.imgLockPrimary,
-        title: "Lorem ipsum dolor sit amet consectetur",
+        title: "",
         type: BottomBarEnum.loremipsumdolorsitametconsectetur),
   ];
 
