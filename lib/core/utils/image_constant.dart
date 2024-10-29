@@ -18,4 +18,6 @@ class ImageConstant {
   static String imgPw = '$imagePath/img_password.png';
   static String imageBgCreateAccount = '$imagePath/create_account.png';
   static String imgCamera = '$imagePath/img_camera.png';
+  static String imgProfile = '$imagePath/img_profile.png';
+  static String btnArrowRight = '$imagePath/button_arrow_right.png';
   }

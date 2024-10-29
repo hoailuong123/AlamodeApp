@@ -14,10 +14,9 @@ class CustomPhoneNumber extends StatelessWidget {
     Key? key,
     required this.country,
     required this.onTap,
-    required this.controller, 
+    required this.controller,
     required TextInputType keyboardType,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -89,42 +88,40 @@ class CustomPhoneNumber extends StatelessWidget {
   }
 
   Widget _buildDialogItem(Country country) => Row(
-  children: <Widget>[
-    CountryPickerUtils.getDefaultFlagImage(country),
-    Container(
-      margin: EdgeInsets.only(
-        left: 10.h,
-      ),
-      width: 60.h,
-      child: Text(
-        "+${country.phoneCode}",
-        style: TextStyle(fontSize: 14.fSize),
-      ),
-    ),
-    const SizedBox(width: 8.0),
-    Flexible(
-      child: Text(
-        country.name,
-        style: TextStyle(fontSize: 14.fSize),
-      ),
-    ),
-  ],
-);
+        children: <Widget>[
+          CountryPickerUtils.getDefaultFlagImage(country),
+          Container(
+            margin: EdgeInsets.only(
+              left: 10.h,
+            ),
+            width: 60.h,
+            child: Text(
+              "+${country.phoneCode}",
+              style: TextStyle(fontSize: 14.fSize),
+            ),
+          ),
+          const SizedBox(width: 8.0),
+          Flexible(
+            child: Text(
+              country.name,
+              style: TextStyle(fontSize: 14.fSize),
+            ),
+          ),
+        ],
+      );
 
-void _openCountryPicker(BuildContext context) => showDialog(
-  context: context,
-  builder: (context) => CountryPickerDialog(
-    searchInputDecoration: InputDecoration(
-      hintText: 'Search...',
-      hintStyle: TextStyle(fontSize: 14.fSize),
-    ),
-    isSearchable: true,
-    title: Text('Select your phone code',
-        style: TextStyle(fontSize: 14.fSize)),
-    onValuePicked: (Country country) => onTap(country),
-    itemBuilder: _buildDialogItem,
-  ),
-);
-
+  void _openCountryPicker(BuildContext context) => showDialog(
+        context: context,
+        builder: (context) => CountryPickerDialog(
+          searchInputDecoration: InputDecoration(
+            hintText: 'Search...',
+            hintStyle: TextStyle(fontSize: 14.fSize),
+          ),
+          isSearchable: true,
+          title: Text('Select your phone code',
+              style: TextStyle(fontSize: 14.fSize)),
+          onValuePicked: (Country country) => onTap(country),
+          itemBuilder: _buildDialogItem,
+        ),
+      );
 }
-
