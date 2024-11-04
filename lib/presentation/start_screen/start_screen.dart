@@ -58,7 +58,7 @@ class StartScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 68.h),
                 CustomElevatedButton(
-                  height: 50.h,
+                  height: 61.h,
                   text: "Let's get started",
                   buttonStyle: CustomButtonStyles.fillPrimary,
                   buttonTextStyle: CustomTextStyles.titleLargeNunitoSansGray10001,
