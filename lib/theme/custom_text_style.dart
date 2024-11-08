@@ -22,6 +22,7 @@ extension on TextStyle {
 }
 
 class CustomTextStyles {
+  
   static TextStyle get titleLarge20 => theme.textTheme.titleLarge!.copyWith(
         fontSize: 20.fSize,
       );
@@ -65,6 +66,12 @@ class CustomTextStyles {
   static TextStyle get titleSmallMedium => theme.textTheme.titleSmall!.copyWith(
         fontWeight: FontWeight.w500,
       );
+  static TextStyle get titleSmallBlack90015 => theme.textTheme.titleSmall!.copyWith(
+        color: appTheme.black900,
+        fontSize: 15.fSize,
+        fontWeight: FontWeight.w500,
+      );
+      
   static get titleMedium_1 => theme.textTheme.titleMedium!;
   static TextStyle get titleSmallPoppinsBluegray100 =>
       theme.textTheme.titleSmall!.poppins.copyWith(
@@ -164,7 +171,6 @@ class CustomTextStyles {
       theme.textTheme.labelLarge!.copyWith(
         color: appTheme.black900,
       );
-
   static TextStyle get labelLargeRed300 => theme.textTheme.labelLarge!.copyWith(
         color: appTheme.red300,
         fontSize: 20.fSize,
@@ -175,7 +181,23 @@ class CustomTextStyles {
         color: appTheme.black900,
         fontWeight: FontWeight.w700,
       );
-
+  static TextStyle get labelLargeOnErrorContainerBold =>
+      theme.textTheme.labelLarge!.copyWith(
+        color: theme.colorScheme.onErrorContainer,
+        fontWeight: FontWeight.w700,
+      );
+  static TextStyle get labelLargeNunitoSansOnErrorContainer =>
+      theme.textTheme.labelLarge!.nunitoSans.copyWith(
+        color: theme.colorScheme.onErrorContainer,
+        fontSize: 12.fSize,
+        fontWeight: FontWeight.w700,
+      );   
+  static TextStyle get labelMediumRalewayOnErrorContainer =>
+      theme.textTheme.labelMedium!.raleway.copyWith(
+        color: theme.colorScheme.onErrorContainer,
+        fontSize: 11.fSize,
+        fontWeight: FontWeight.w700,
+      );     
   static TextStyle get labelLargeBlue20001 =>
       theme.textTheme.labelLarge!.copyWith(
         color: appTheme.blue20001,

@@ -20,4 +20,5 @@ class ImageConstant {
   static String imgCamera = '$imagePath/img_camera.png';
   static String imgProfile = '$imagePath/img_profile.png';
   static String btnArrowRight = '$imagePath/button_arrow_right.png';
+  static String img = '$imagePath/image.png';
   }
