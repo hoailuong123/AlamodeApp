@@ -1,3 +1,4 @@
+import 'package:alamodeapp/presentation/shop_screen/shop_screen.dart';
 import 'package:flutter/material.dart';
 import '../presentation/app_navigation_screen/app_navigation_screen.dart';
 import '../presentation/login_screen/login_screen.dart';
@@ -41,6 +42,8 @@ class AppRoutes {
       '/payment_methods_history_screen';
   static const String shippingAddressScreen = '/shipping_address_screen';
   static const String appNavigationScreen = '/app_navigation_screen';
+  static const String shopScreen = '/shop_screen';
+
   static const String initialRoute = '/initialRoute';
 
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -68,6 +71,7 @@ class AppRoutes {
     // voucherTabScreen: (context) => VoucherTabScreen(),
     settingsProfileScreen: (context) => SettingsProfileScreen(),
     settingsFullScreen: (context) => SettingsFullScreen(),
+    shopScreen: (context) => ShopScreen(),
     // settingsAddCardScreen: (context) => SettingsAddCardScreen(),
     // paymentMethodsHistoryScreen: (context) => PaymentMethodsHistoryScreen(),
     shippingAddressScreen: (context) => ShippingAddressScreen(),

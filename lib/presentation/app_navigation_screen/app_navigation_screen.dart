@@ -68,6 +68,12 @@ class AppNavigationScreen extends StatelessWidget {
                           onTapScreenTitle: () =>
                               onTapScreenTitle(context, AppRoutes.loginScreen),
                         ),
+                         _buildScreenTitle(
+                          context,
+                          screenTitle: "Setting Full Screen",
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              context, AppRoutes.settingsFullScreen),
+                        ),
                         _buildScreenTitle(
                           context,
                           screenTitle: "Shipping Address Screen",
@@ -76,15 +82,15 @@ class AppNavigationScreen extends StatelessWidget {
                         ),
                         _buildScreenTitle(
                           context,
-                          screenTitle: "Setting Full Screen",
-                          onTapScreenTitle: () => onTapScreenTitle(
-                              context, AppRoutes.settingsFullScreen),
-                        ),
-                        _buildScreenTitle(
-                          context,
                           screenTitle: "Setting Profile Screen",
                           onTapScreenTitle: () => onTapScreenTitle(
                               context, AppRoutes.settingsProfileScreen),
+                        ),
+                        _buildScreenTitle(
+                          context,
+                          screenTitle: "Shop Screen",
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              context, AppRoutes.shopScreen),
                         ),
                       ],
                     ),
