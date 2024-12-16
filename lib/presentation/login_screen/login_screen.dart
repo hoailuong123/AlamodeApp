@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import '/core/app_export.dart';
@@ -8,6 +10,7 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -107,11 +110,63 @@ class LoginScreen extends StatelessWidget {
             },
           ),
           SizedBox(height: 20.h),
+          CustomTextFormField(
+            controller: passwordController,
+            hintText: "Password",
+            textInputAction: TextInputAction.done,
+            textInputType: TextInputType.visiblePassword,
+            contentPadding: EdgeInsets.fromLTRB(18.h, 14.h, 18.h, 12.h),
+            borderDecoration: TextFormFieldStyleHelper.fillGray,
+            fillColor: appTheme.gray5001,
+            obscureText: true,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Please enter your password";
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 20.h),
           CustomElevatedButton(
             height: 60.h,
             text: "Next",
             buttonStyle: CustomButtonStyles.fillPrimary,
             buttonTextStyle: CustomTextStyles.titleLargeNunitoSansGray10001,
+            onPressed: () async {
+              final email = emailController.text;
+              final password = passwordController.text;
+
+              if (_formKey.currentState!.validate()) {
+                final response = await http.post(
+                  Uri.parse('http://127.0.0.1:8000/api/login/'),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                  body: jsonEncode(<String, String>{
+                    'username': email,
+                    'password': password,
+                  }),
+                );
+
+                if (response.statusCode == 200) {
+                  final responseData = jsonDecode(response.body);
+                  if (responseData['role'] != null) {
+                    // Handle successful login
+                    Navigator.pushNamed(context, AppRoutes.shopScreen);
+                  } else {
+                    // Handle login error
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Username or password is incorrect')),
+                    );
+                  }
+                } else {
+                  // Handle login error
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Login failed')),
+                  );
+                }
+              }
+            },
           ),
           SizedBox(height: 14.h),
           CustomElevatedButton(
