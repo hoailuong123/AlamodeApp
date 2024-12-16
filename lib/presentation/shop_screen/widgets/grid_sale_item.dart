@@ -2,8 +2,8 @@ import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 
-class Griddiscount1ItemWidget extends StatelessWidget {
-  const Griddiscount1ItemWidget({Key? key}) : super(key: key);
+class GridSaleItemWidget extends StatelessWidget {
+  const GridSaleItemWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -2,8 +2,8 @@ import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 
-class Listzipcode1ItemWidget extends StatelessWidget {
-  const Listzipcode1ItemWidget({Key? key})
+class MostPopularItemWidget extends StatelessWidget {
+  const MostPopularItemWidget({Key? key})
       : super(
           key: key,
         );

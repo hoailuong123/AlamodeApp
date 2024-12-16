@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 
-class ListloremipsumlItemWidget extends StatelessWidget {
-  const ListloremipsumlItemWidget({Key? key})
+class GridNewItemWidget extends StatelessWidget {
+  const GridNewItemWidget({Key? key})
       : super(
           key: key,
         );
