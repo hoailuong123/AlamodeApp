@@ -13,7 +13,7 @@ extension TextFormFieldStyleHelper on CustomTextFormField {
       );
 }
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   CustomTextFormField({
     Key? key,
     this.alignment,
@@ -71,68 +71,84 @@ class CustomTextFormField extends StatelessWidget {
   final bool? filled;
   final FormFieldValidator<String>? validator;
 
+  
+  @override
+  _CustomTextFormFieldState createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  bool _showPassword = false; // To toggle password visibility
+
   @override
   Widget build(BuildContext context) {
-    return alignment != null
+    return widget.alignment != null
         ? Align(
-            alignment: alignment ?? Alignment.center,
+            alignment: widget.alignment ?? Alignment.center,
             child: textFormFieldWidget(context))
         : textFormFieldWidget(context);
   }
 
   Widget textFormFieldWidget(BuildContext context) => Container(
-        width: width ?? double.maxFinite,
-        decoration: boxDecoration,
+        width: widget.width ?? double.maxFinite,
+        decoration: widget.boxDecoration,
         child: TextFormField(
-          scrollPadding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          controller: controller,
-          focusNode: focusNode,
+          scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          controller: widget.controller,
+          focusNode: widget.focusNode,
           onTapOutside: (event) {
-            if (focusNode != null) {
-              focusNode?.unfocus();
+            if (widget.focusNode != null) {
+              widget.focusNode?.unfocus();
             } else {
               FocusManager.instance.primaryFocus?.unfocus();
             }
           },
-          autofocus: autofocus!,
-          style: textStyle ?? CustomTextStyles.titleMediumIndigo200,
-          obscureText: obscureText!,
-          readOnly: readOnly!,
+          autofocus: widget.autofocus!,
+          style: widget.textStyle ?? CustomTextStyles.titleMediumIndigo200,
+          obscureText: widget.obscureText! && !_showPassword,
+          readOnly: widget.readOnly!,
           onTap: () {
-            onTap?.call();
+            widget.onTap?.call();
           },
-          textInputAction: textInputAction,
-          keyboardType: textInputType,
-          maxLines: maxLines ?? 1,
+          textInputAction: widget.textInputAction,
+          keyboardType: widget.textInputType,
+          maxLines: widget.maxLines ?? 1,
           decoration: decoration,
-          validator: validator,
+          validator: widget.validator,
         ),
       );
 
   InputDecoration get decoration => InputDecoration(
-        hintText: hintText ?? "",
-        hintStyle: hintStyle ?? CustomTextStyles.titleSmallPoppinsBluegray100,
-        prefixIcon: prefix,
-        prefixIconConstraints: prefixConstraints,
-        suffixIcon: suffix,
-        suffixIconConstraints: suffixConstraints,
+        hintText: widget.hintText ?? "",
+        hintStyle: widget.hintStyle ?? CustomTextStyles.titleSmallPoppinsBluegray100,
+        prefixIcon: widget.prefix,
+        prefixIconConstraints: widget.prefixConstraints,
+        suffixIcon: widget.obscureText! ? IconButton(
+          icon: Icon(
+            _showPassword ? Icons.visibility : Icons.visibility_off,
+            color: _showPassword ? Colors.blue : Colors.grey,
+          ),
+          onPressed: () {
+            setState(() {
+              _showPassword = !_showPassword;
+            });
+          },
+        ) : null,
+        suffixIconConstraints: widget.suffixConstraints,
         isDense: true,
-        contentPadding:
-            contentPadding ?? EdgeInsets.fromLTRB(12.h, 14.h, 12.h, 12.h),
-        fillColor: fillColor ?? appTheme.gray10002,
-        filled: filled,
-        border: borderDecoration ??
+        contentPadding: widget.contentPadding ?? EdgeInsets.fromLTRB(12.h, 14.h, 12.h, 12.h),
+        fillColor: widget.fillColor ?? appTheme.gray10002,
+        filled: widget.filled,
+        border: widget.borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.h),
               borderSide: BorderSide.none,
             ),
-        enabledBorder: borderDecoration ??
+        enabledBorder: widget.borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.h),
               borderSide: BorderSide.none,
             ),
-        focusedBorder: (borderDecoration ??
+        focusedBorder: (widget.borderDecoration ??
                 OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.h),
                 ))
