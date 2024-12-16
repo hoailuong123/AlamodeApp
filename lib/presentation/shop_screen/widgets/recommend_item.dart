@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 
-class RecommendedproductsgridItemWidget extends StatelessWidget {
-  const RecommendedproductsgridItemWidget({Key? key}) : super(key: key);
+class RecommendItemWidget extends StatelessWidget {
+  const RecommendItemWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
