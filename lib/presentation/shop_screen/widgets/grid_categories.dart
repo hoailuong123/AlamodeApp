@@ -28,17 +28,16 @@ class _GridCategoriesState extends State<GridCategories> {
       future: _futureCategories,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // Hiển thị loading
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          // Hiển thị lỗi
           return Center(child: Text('Đã xảy ra lỗi: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          // Hiển thị thông báo không có dữ liệu
           return Center(child: Text('Không có danh mục nào'));
         } else {
-          // Hiển thị danh sách danh mục
-          List<Category> categories = snapshot.data!;
+          // Lọc chỉ các danh mục không có danh mục con
+          List<Category> categoriesWithoutSub = snapshot.data!
+              .where((category) => category.subcategoryCount == 0)
+              .toList();
 
           return Container(
             width: double.maxFinite,
@@ -54,24 +53,30 @@ class _GridCategoriesState extends State<GridCategories> {
                         "Categories",
                         style: theme.textTheme.titleLarge,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "See All",
-                            style: CustomTextStyles.titleSmall15,
-                          ),
-                          SizedBox(width: 12.h),
-                          CustomIconButton(
-                            height: 30.h,
-                            width: 30.h,
-                            padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillPrimary,
-                            alignment: Alignment.center,
-                            child: CustomImageView(
-                              imagePath: ImageConstant.imgArrow,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.categoriesFilterScreen);
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "See All",
+                              style: CustomTextStyles.titleSmall15,
                             ),
-                          ),
-                        ],
+                            SizedBox(width: 12.h),
+                            CustomIconButton(
+                              height: 30.h,
+                              width: 30.h,
+                              padding: EdgeInsets.all(6.h),
+                              decoration: IconButtonStyleHelper.fillPrimary,
+                              alignment: Alignment.center,
+                              child: CustomImageView(
+                                imagePath: ImageConstant.imgArrow,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -80,7 +85,7 @@ class _GridCategoriesState extends State<GridCategories> {
                 GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: categories.length,
+                  itemCount: categoriesWithoutSub.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 4.h,
@@ -88,7 +93,7 @@ class _GridCategoriesState extends State<GridCategories> {
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
-                    final category = categories[index];
+                    final category = categoriesWithoutSub[index];
                     return CategoryItemWidget(category: category);
                   },
                 ),
@@ -145,20 +150,6 @@ class CategoryItemWidget extends StatelessWidget {
               style: theme.textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
-            if (category.subcategoryCount > 0)
-              Container(
-                margin: EdgeInsets.only(top: 4.h),
-                padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: appTheme.blue5001,
-                  borderRadius: BorderRadiusStyle.roundedBorder5,
-                ),
-                child: Text(
-                  "${category.subcategoryCount}",
-                  textAlign: TextAlign.center,
-                  style: CustomTextStyles.labelLargeBold,
-                ),
-              ),
           ],
         ),
       ),
