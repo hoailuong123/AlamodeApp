@@ -1,3 +1,8 @@
+import 'package:alamodeapp/presentation/cart_page/cart_page.dart';
+import 'package:alamodeapp/presentation/payment_screen/payment_screen.dart';
+import 'package:alamodeapp/presentation/product_full_screen/product_full_screen.dart';
+import 'package:alamodeapp/presentation/product_screen/product_screen.dart';
+import 'package:alamodeapp/presentation/product_variation_screen/product_variation_screen.dart';
 import 'package:alamodeapp/presentation/shop_screen/shop_screen.dart';
 import 'package:flutter/material.dart';
 import '../presentation/app_navigation_screen/app_navigation_screen.dart';
@@ -7,6 +12,7 @@ import '../presentation/start_screen/start_screen.dart';
 import '../presentation/shipping_address_screen/shipping_address_screen.dart';
 import '../presentation/settings_profile_screen/settings_profile_screen.dart';
 import '../presentation/settings_full_screen/settings_full_screen.dart';
+
 
 
 class AppRoutes {
@@ -43,6 +49,12 @@ class AppRoutes {
   static const String shippingAddressScreen = '/shipping_address_screen';
   static const String appNavigationScreen = '/app_navigation_screen';
   static const String shopScreen = '/shop_screen';
+  static const String productScreen = '/product_screen';
+  static const String productVariationScreen = '/product_variation_screen';
+  static const String paymentScreen = '/payment_screen';
+
+
+
 
   static const String initialRoute = '/initialRoute';
 
@@ -60,10 +72,12 @@ class AppRoutes {
     // searchResultsScreen: (context) => SearchResultsScreen(),
     // imageSearchScreen: (context) => ImageSearchScreen(),
     // filterScreen: (context) => FilterScreen(),
-    // productFullScreen: (context) => ProductFullScreen(),
+    productFullScreen: (context) => ProductFullScreen(),
+    productScreen: (context) => ProductScreen(),
+    productVariationScreen: (context) => ProductVariationScreen(),
     // reviewsScreen: (context) => ReviewsScreen(),
     // recentlyViewedScreen: (context) => RecentlyViewedScreen(),
-    // cartPage: (context) => CartPage(),
+    cartPage: (context) => CartPage(),
     // cartEmptyShownFromWishlistScreen: (context) => CartEmptyShownFromWishlistScreen(),
     // toReceiveScreen: (context) => ToReceiveScreen(),
     // myActivityScreen: (context) => MyActivityScreen(),
@@ -76,6 +90,8 @@ class AppRoutes {
     // paymentMethodsHistoryScreen: (context) => PaymentMethodsHistoryScreen(),
     shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
+    paymentScreen: (context) => PaymentScreen(),
+
     initialRoute: (context) => AppNavigationScreen(),
   };
 }

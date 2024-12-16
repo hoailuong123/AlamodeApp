@@ -38,12 +38,25 @@ class CustomTextStyles {
         fontSize: 16.fSize,
         fontWeight: FontWeight.w500,
       );
+  static TextStyle get titleMediumBlack900 =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w500,
+      );
+      
   static TextStyle get titleMediumBlack900Medium16 =>
       theme.textTheme.titleMedium!.copyWith(
         color: appTheme.black900,
         fontSize: 16.fSize,
         fontWeight: FontWeight.w500,
       );
+  static TextStyle get titleMediumBlack900Medium =>
+      theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900,
+        fontWeight: FontWeight.w500,
+      );    
+      
   static TextStyle get titleMediumBlack900Medium_2 =>
       theme.textTheme.titleMedium!.copyWith(
         color: appTheme.black900,
@@ -71,7 +84,11 @@ class CustomTextStyles {
         fontSize: 15.fSize,
         fontWeight: FontWeight.w500,
       );
-      
+  static TextStyle get titleSmallBlack900 => theme.textTheme.titleSmall!.copyWith(
+        color: appTheme.black900,
+        fontSize: 15.fSize,
+        fontWeight: FontWeight.w300,
+      );
   static get titleMedium_1 => theme.textTheme.titleMedium!;
   static TextStyle get titleSmallPoppinsBluegray100 =>
       theme.textTheme.titleSmall!.poppins.copyWith(
@@ -83,10 +100,16 @@ class CustomTextStyles {
           color: appTheme.gray10001,
           fontSize: 22.fSize,
           fontWeight: FontWeight.w300);
+  static TextStyle get titleLargeBlack900 =>
+      theme.textTheme.titleLarge!.copyWith(
+          color: appTheme.black900,
+          fontSize: 22.fSize,
+          fontWeight: FontWeight.w300);        
 
   static TextStyle get titleLargeExtraBold => theme.textTheme.titleLarge!
       .copyWith(fontSize: 20.fSize, fontWeight: FontWeight.w800);
-
+  static TextStyle get titleMediumBlack900SemiBold => theme.textTheme.titleMedium!
+      .copyWith(fontSize: 20.fSize, fontWeight: FontWeight.w800);
   static TextStyle get titleSmall15 => theme.textTheme.titleSmall!.copyWith(
         fontSize: 15.fSize,
       );
@@ -170,6 +193,10 @@ class CustomTextStyles {
   static TextStyle get labelLargeBlack900 =>
       theme.textTheme.labelLarge!.copyWith(
         color: appTheme.black900,
+      );
+  static TextStyle get labelLargePrimary =>
+      theme.textTheme.labelLarge!.copyWith(
+        color: theme.colorScheme.primary,
       );
   static TextStyle get labelLargeRed300 => theme.textTheme.labelLarge!.copyWith(
         color: appTheme.red300,

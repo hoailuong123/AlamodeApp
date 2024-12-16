@@ -21,4 +21,24 @@ class ImageConstant {
   static String imgProfile = '$imagePath/img_profile.png';
   static String btnArrowRight = '$imagePath/button_arrow_right.png';
   static String img = '$imagePath/image.png';
-  }
+  static String imgLike = '$imagePath/img_like.png';
+  static String imgArrowLeft = '$imagePath/img_arrow_left.png';
+  static String imgShare = '$imagePath/img_share.png';
+  static String imgProduct = '$imagePath/image_product.png';
+  static String imgNewBag = '$imagePath/image_bag.png';
+  static String imgProduct2 = '$imagePath/image2.png';
+  static String imgProduct3 = '$imagePath/image3.png';
+  static String imgProduct4 = '$imagePath/image4.png';
+  static String imgProduct5 = '$imagePath/image5.png';
+  static String imgProduct6 = '$imagePath/image6.png';
+  static String imgFrame = '$imagePath/icon_frame.png';
+  static String imgCardvisa = '$imagePath/Visa.png';
+  static String imgCardmaster= '$imagePath/Mastercard.png';
+
+
+
+
+
+
+
+}

@@ -92,6 +92,36 @@ class AppNavigationScreen extends StatelessWidget {
                           onTapScreenTitle: () => onTapScreenTitle(
                               context, AppRoutes.shopScreen),
                         ),
+                        _buildScreenTitle(
+                          context,
+                          screenTitle: "Product Full Screen",
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              context, AppRoutes.productFullScreen),
+                        ),
+                        _buildScreenTitle(
+                          context,
+                          screenTitle: "Product Screen",
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              context, AppRoutes.productScreen),
+                        ),
+                        _buildScreenTitle(
+                          context,
+                          screenTitle: "Product Variation Screen",
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              context, AppRoutes.productVariationScreen),
+                        ),
+                        _buildScreenTitle(
+                          context,
+                          screenTitle: "Cart Screen",
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              context, AppRoutes.cartPage),
+                        ),
+                        _buildScreenTitle(
+                          context,
+                          screenTitle: "Payment Screen",
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              context, AppRoutes.paymentScreen),
+                        ),
                       ],
                     ),
                   ),
