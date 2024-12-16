@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart' as fs;
 import '../../../core/app_export.dart';
 
-class Sliderdb257e4f2ItemWidget extends StatelessWidget {
-  const Sliderdb257e4f2ItemWidget({Key? key}) : super(key: key);
+class SliderItem extends StatelessWidget {
+  const SliderItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

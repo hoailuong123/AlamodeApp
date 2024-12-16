@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 import '../../../widgets/custom_icon_button.dart';
 
-class ListplayOne1ItemWidget extends StatelessWidget {
-  const ListplayOne1ItemWidget({Key? key})
+class OneItemWidget extends StatelessWidget {
+  const OneItemWidget({Key? key})
       : super(
           key: key,
         );

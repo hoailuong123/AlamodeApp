@@ -1,3 +1,5 @@
+// lib/presentation/shop_screen/shop_initial_page.dart
+
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
@@ -14,13 +16,10 @@ import 'widgets/grid_sale_item.dart';
 import 'widgets/most_popular.dart';
 import 'widgets/one_item.dart';
 import 'widgets/recommend_item.dart';
-import 'widgets/slider_item.dart';
+import 'widgets/slider_item.dart'; // Đảm bảo rằng bạn đã tạo các widget này
 
 class ShopInitialPage extends StatefulWidget {
-  const ShopInitialPage({Key? key})
-      : super(
-          key: key,
-        );
+  const ShopInitialPage({Key? key}) : super(key: key);
 
   @override
   ShopInitialPageState createState() => ShopInitialPageState();
@@ -28,7 +27,7 @@ class ShopInitialPage extends StatefulWidget {
 
 class ShopInitialPageState extends State<ShopInitialPage> {
   TextEditingController searchController = TextEditingController();
-  int sliderIndex = 1;
+  int sliderIndex = 0; // Thay đổi từ 1 thành 0 vì index bắt đầu từ 0
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                     SizedBox(height: 8.h),
                     _buildBigSaleBanner(context),
                     SizedBox(height: 18.h),
-                    _buildCategoriesSection(context),
+                    GridCategories(),
                     SizedBox(height: 28.h),
                     _buildTopProductsSection(context),
                     SizedBox(height: 48.h),
@@ -77,10 +76,10 @@ class ShopInitialPageState extends State<ShopInitialPage> {
 
   /// Common widget
   Widget _buildMostPopularSection(
-    BuildContext context, {
-    required String titleText,
-    required String seeAllText,
-  }) {
+      BuildContext context, {
+        required String titleText,
+        required String seeAllText,
+      }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,12 +170,14 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                 viewportFraction: 1.0,
                 scrollDirection: Axis.horizontal,
                 onPageChanged: (index, reason) {
-                  sliderIndex = index;
+                  setState(() {
+                    sliderIndex = index;
+                  });
                 },
               ),
               itemCount: 1,
               itemBuilder: (context, index, realIndex) {
-                return Sliderdb257e4f2ItemWidget();
+                return SliderItem();
               },
             ),
           ),
@@ -196,80 +197,6 @@ class ShopInitialPageState extends State<ShopInitialPage> {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  /// Section Widget
-  Widget _buildCategoriesSection(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      margin: EdgeInsets.only(
-        left: 16.h,
-        right: 24.h,
-      ),
-      child: Column(
-        children: [
-          SizedBox(
-            width: double.maxFinite,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Text(
-                    "Categories",
-                    style: theme.textTheme.titleLarge,
-                  ),
-                ),
-                Spacer(),
-                Padding(
-                  padding: EdgeInsets.only(top: 6.h),
-                  child: Text(
-                    "See All",
-                    style: CustomTextStyles.titleSmall15,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 12.h,
-                    bottom: 4.h,
-                  ),
-                  child: CustomIconButton(
-                    height: 30.h,
-                    width: 30.h,
-                    padding: EdgeInsets.all(6.h),
-                    decoration: IconButtonStyleHelper.fillPrimary,
-                    alignment: Alignment.center,
-                    child: CustomImageView(
-                      imagePath: ImageConstant.imgArrow,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 8.h),
-          ResponsiveGridListBuilder(
-              minItemWidth: 1,
-              minItemsPerRow: 2,
-              maxItemsPerRow: 2,
-              horizontalGridSpacing: 4.h,
-              verticalGridSpacing: 4.h,
-              builder: (context, items) => ListView(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    physics: NeverScrollableScrollPhysics(),
-                    children: items,
-                  ),
-              gridItems: List.generate(
-                6,
-                (index) {
-                  return Grid532c6dcf29c1ItemWidget();
-                },
-              ))
         ],
       ),
     );
@@ -296,9 +223,9 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                 direction: Axis.horizontal,
                 spacing: 8.h,
                 children: List.generate(
-                  5,
-                  (index) {
-                    return ListplayOne1ItemWidget();
+                  5, // Cập nhật số lượng sản phẩm nếu cần
+                      (index) {
+                    return OneItemWidget();
                   },
                 ),
               ),
@@ -330,7 +257,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 10.h,
               ),
               Container(
                 child: SingleChildScrollView(
@@ -339,7 +266,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                     direction: Axis.horizontal,
                     spacing: 6.h,
                     children: List.generate(4, (index) {
-                      return ListloremipsumlItemWidget();
+                      return GridNewItemWidget();
                     }),
                   ),
                 ),
@@ -351,6 +278,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
     );
   }
 
+  /// Section Widget
   Widget _buildFlashSaleSection(BuildContext context) {
     return Container(
       width: double.maxFinite,
@@ -426,16 +354,16 @@ class ShopInitialPageState extends State<ShopInitialPage> {
           maxItemsPerRow: 3,
           horizontalGridMargin: 4.h,
           verticalGridMargin: 4.h,
-          builder: (context, item) => ListView(
+          builder: (context, items) => ListView(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: NeverScrollableScrollPhysics(),
-            children: item,
+            children: items,
           ),
           gridItems: List.generate(
             6,
-            (index) {
-              return Griddiscount1ItemWidget();
+                (index) {
+              return GridSaleItemWidget();
             },
           ),
         )
@@ -443,7 +371,6 @@ class ShopInitialPageState extends State<ShopInitialPage> {
     );
   }
 
-  /// Section Widget
   /// Section Widget
   Widget _buildJustForYouSection(BuildContext context) {
     return SizedBox(
@@ -473,8 +400,8 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                     spacing: 6.h,
                     children: List.generate(
                       4,
-                      (index) {
-                        return Listzipcode1ItemWidget();
+                          (index) {
+                        return MostPopularItemWidget();
                       },
                     ),
                   ),
@@ -533,9 +460,9 @@ class ShopInitialPageState extends State<ShopInitialPage> {
           children: items,
         ),
         gridItems: List.generate(
-          6,
-          (index) {
-            return RecommendedproductsgridItemWidget();
+          6, // Cập nhật số lượng sản phẩm được đề xuất nếu cần
+              (index) {
+            return RecommendItemWidget(); // Sử dụng widget RecommendItemWidget đã tạo
           },
         ),
       ),
