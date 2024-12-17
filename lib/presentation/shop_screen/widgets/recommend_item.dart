@@ -2,82 +2,92 @@ import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 
 class RecommendItemWidget extends StatelessWidget {
-  const RecommendItemWidget({Key? key}) : super(key: key);
+  final String productName;
+  final String productPrice;
+  final String productImage;
+
+  const RecommendItemWidget({
+    Key? key,
+    required this.productName,
+    required this.productPrice,
+    required this.productImage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: double.maxFinite,
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            elevation: 0,
-            margin: EdgeInsets.zero,
-            color: theme.colorScheme.onErrorContainer,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadiusStyle.roundedBorder10,),
-            
-            child: Container(
-              height: 180.h,
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.onErrorContainer,
-                borderRadius: BorderRadiusStyle.roundedBorder10,
-                boxShadow: [
-                  BoxShadow(
-                    color: appTheme.black900.withOpacity(0.1),
-                    spreadRadius: 2.h,
-                    blurRadius: 2.h,
-                    offset: Offset(
-                      0,
-                      5,
-                    ),
-                  ),
-                ],
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CustomImageView(
-                    imagePath: ImageConstant.img,
-                    height: 170.h,
-                    width: double.maxFinite,
-                    radius: BorderRadius.circular(
-                      5.h,
-                    ),
-                  ),
-                  CustomImageView(
-                    imagePath: ImageConstant.img,
-                    height: 170.h,
-                    width: double.maxFinite,
-                    radius: BorderRadius.circular(
-                      5.h,
-                    ),
-                  ),
-                ],
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Constrained Image
+          Flexible(
+            flex: 5,
+            child: ClipRRect(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+              child: Image.network(
+                productImage,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/placeholder.png',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  );
+                },
               ),
             ),
           ),
-        ),
-        SizedBox(height: 4.h),
-        SizedBox(
-          width: 118.h,
-          child: Text(
-            "Lorem ipsum dolor sit amet consectetur",
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodySmall!.copyWith(
-              height: 1.33,
+
+          // Product Name
+          Flexible(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              child: Text(
+                productName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 4.h),
-        Text(
-          "\$17,00",
-          style: theme.textTheme.titleMedium,
-        )
-      ],
+
+          // Product Price
+          Flexible(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              child: Text(
+                "\$$productPrice",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
+
+
+

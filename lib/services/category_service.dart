@@ -6,7 +6,7 @@ class CategoryService {
   final String baseUrl = 'https://sterling-notably-monster.ngrok-free.app';
 
   Future<List<Category>> fetchCategories() async {
-    final response = await http.get(Uri.parse('$baseUrl/api/categories/')); // Cập nhật đường dẫn API nếu cần
+    final response = await http.get(Uri.parse('$baseUrl/api/categories/')); 
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
