@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 
 class GridNewItemWidget extends StatelessWidget {
-  const GridNewItemWidget({Key? key})
-      : super(
-          key: key,
-        );
+  final String imageUrl;
+  final String productName;
+  final String productPrice;
+
+  const GridNewItemWidget({
+    Key? key,
+    required this.imageUrl,
+    required this.productName,
+    required this.productPrice,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,77 +31,35 @@ class GridNewItemWidget extends StatelessWidget {
                   color: appTheme.black900.withOpacity(0.1),
                   spreadRadius: 2.h,
                   blurRadius: 2.h,
-                  offset: Offset(
-                    0,
-                    5,
-                  ),
+                  offset: Offset(0, 5),
                 ),
               ],
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: double.maxFinite,
-                  child: Card(
-                    clipBehavior: Clip.antiAlias,
-                    elevation: 0,
-                    margin: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadiusStyle.roundedBorder5,
-                    ),
-                    child: Container(
-                      height: 128.h,
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadiusStyle.roundedBorder5,
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          CustomImageView(
-                            imagePath: ImageConstant.imgProduct3,
-                            height: 128.h,
-                            width: 130.h,
-                            radius: BorderRadius.circular(
-                              5.h,
-                            ),
-                          ),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgProduct4,
-                            height: 128.h,
-                            width: 130.h,
-                            radius: BorderRadius.circular(
-                              5.h,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 4.h),
-          SizedBox(
-            width: 118.h,
-            child: Text(
-              "Lorem ipsum dolor sit amet consectetur.",
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodySmall!.copyWith(
-                height: 1.33,
+            child: ClipRRect(
+              borderRadius: BorderRadiusStyle.roundedBorder5,
+              child: Image.network(
+                imageUrl,
+                height: 128.h,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
             ),
           ),
           SizedBox(height: 4.h),
           Text(
-            "\$17,00",
+            productName,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodySmall!.copyWith(height: 1.33),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            "\$$productPrice",
             style: theme.textTheme.titleMedium,
-          )
+          ),
         ],
       ),
     );
   }
 }
+
