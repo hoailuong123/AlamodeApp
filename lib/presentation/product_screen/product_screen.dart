@@ -12,6 +12,7 @@ import '../../theme/custom_button_style.dart';
 import '/presentation/cart_page/widgets/cart_manager.dart';
 import '/presentation/cart_page/cart_page.dart';
 import '/presentation/product_variation_screen/product_variation_screen.dart';
+import '/presentation/payment_screen/payment_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   final int productid; // Required product ID
@@ -240,11 +241,30 @@ class _ProductScreenState extends State<ProductScreen> {
               text: "Buy Now",
               buttonStyle: CustomButtonStyles.fillPrimary,
               onPressed: () {
+                // Tạo danh sách chỉ chứa sản phẩm hiện tại
+                final selectedProduct = {
+                  'product_name': product.name,
+                  'image': product.mainImage,
+                  'price': product.price,
+                  'quantity': 1, // Mặc định số lượng là 1
+                  'size': product.sizes ?? "M", // Kích thước mặc định
+                  'color': product.colors ?? "Red", // Màu mặc định
+                };
+
+                // Tính tổng tiền cho sản phẩm
+                final totalAmount = (selectedProduct['price'] as num? ?? 0) *
+                    (selectedProduct['quantity'] as num? ?? 1);
+
+                // Chuyển sang PaymentScreen với sản phẩm được chọn và tổng tiền
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        PaymentScreen(),
+                    builder: (context) => PaymentScreen(
+                      cartItems: [
+                        selectedProduct
+                      ], // Chuyển danh sách có 1 sản phẩm
+                      totalAmount: totalAmount.toDouble(), // Tổng tiền của sản phẩm
+                    ),
                   ),
                 );
               },

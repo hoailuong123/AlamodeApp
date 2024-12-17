@@ -1,7 +1,9 @@
+import 'package:alamodeapp/presentation/payment_screen/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '/presentation/payment_screen/widgets/list_product.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -114,7 +116,7 @@ class _CartScreenState extends State<CartScreen> {
                   product['product_name'],
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                Text("Pink, Size ${product['size']}",
+                Text("${product['color']}, Size ${product['size']}",
                     style: TextStyle(color: Colors.grey)),
                 SizedBox(height: 8),
                 Text(
@@ -151,33 +153,6 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildShippingAddress() {
-    return Container(
-      margin: EdgeInsets.all(16),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Shipping Address",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
-              Text(
-                  "26, Duong So 2, Thao Dien Ward,\nAn Phu, District 2, Ho Chi Minh City"),
-            ],
-          ),
-          Icon(Icons.edit, color: Colors.blue),
-        ],
-      ),
-    );
-  }
-
   Widget _buildTotalSection() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -192,13 +167,21 @@ class _CartScreenState extends State<CartScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Total", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text("Total", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           Text("\$${_total.toStringAsFixed(2)}",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-            child: Text("Checkout", style: TextStyle(color: Colors.white)),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PaymentScreen(cartItems: [], totalAmount: _total),
+                  ),
+                );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+            child: Text("Payment", style: TextStyle(color: Colors.white,fontSize: 18)),
           ),
         ],
       ),
@@ -213,7 +196,6 @@ class _CartScreenState extends State<CartScreen> {
       ),
       body: Column(
         children: [
-          _buildShippingAddress(),
           Expanded(
             child: FutureBuilder<List<dynamic>>(
               future: _cartItems,
