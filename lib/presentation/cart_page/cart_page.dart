@@ -1,124 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:alamodeapp/theme/custom_text_style.dart';
-import '../../../widgets/custom_icon_button.dart';
-import '../../../widgets/custom_text_form_field.dart';
-import '../../../core/app_export.dart';
-import 'widgets/list_product_item.dart';
+import '../../models/product_model.dart';
+import '/presentation/cart_page/widgets/cart_manager.dart';
 
-class CartPage extends StatelessWidget {
-  CartPage({Key? key}) : super(key: key);
+class CartScreen extends StatelessWidget {
+  final List<ProductModel> cartItems;
+
+  const CartScreen({Key? key, required this.cartItems}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Cart",
-                style: CustomTextStyles.titleLargeBlack900,
-              ),
-              CircleAvatar(
-                radius: 12,
-                backgroundColor: Colors.blue,
-                child: Text(
-                  "2",
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Cart"),
+      ),
+      body: cartItems.isEmpty
+          ? Center(child: Text("Your cart is empty!"))
+          : ListView.builder(
+              itemCount: cartItems.length,
+              itemBuilder: (context, index) {
+                final product = cartItems[index];
+                return ListTile(
+                  leading: Image.network(
+                    product.mainImage ?? 'assets/images/placeholder.png',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Text(product.name),
+                  subtitle: Text(
+                    product.salePrice != null
+                        ? "\$${product.salePrice}"
+                        : "\$${product.price}",
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.remove_circle_outline),
+                    onPressed: () {
+                      // Remove item logic
+                    },
+                  ),
+                );
+              },
+            ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () {
+            // Checkout logic
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+          child: Text(
+            "Proceed to Checkout",
+            style: TextStyle(color: Colors.white),
           ),
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: ListView(
-                children: [
-                  ProductListItemWidget(),
-                  SizedBox(height: 16),
-                  ProductListItemWidget(),
-                  SizedBox(height: 32),
-                ],
-              ),
-            ),
-            _buildTotalAndCheckout(context),
-          ],
-        ),
-        bottomNavigationBar: _buildBottomNavigationBar(context),
       ),
-    );
-  }
-
-  Widget _buildTotalAndCheckout(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Total",
-            style: CustomTextStyles.titleMediumBlack900,
-          ),
-          Row(
-            children: [
-              Text(
-                "\$34,00",
-                style: CustomTextStyles.headlineMediumBlack900,
-              ),
-              SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                child: Text(
-                  "Checkout",
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: "Home",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite),
-          label: "Wishlist",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.list),
-          label: "Orders",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: "Profile",
-        ),
-      ],
     );
   }
 }
