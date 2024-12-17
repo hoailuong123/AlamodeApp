@@ -1,7 +1,7 @@
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart' as fs;
 import '../../../core/app_export.dart';
+
 
 class SliderItem extends StatelessWidget {
   const SliderItem({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class SliderItem extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           CustomImageView(
-            imagePath: ImageConstant.img,
+            imagePath: 'assets/images/slider1.png', // Update image path
             height: 130.h,
             width: double.maxFinite,
             radius: BorderRadius.circular(8.h),
@@ -28,10 +28,8 @@ class SliderItem extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: fs.Svg(
-                  ImageConstant.img,
-                ),
-                fit: BoxFit.fill,
+                image: AssetImage('assets/images/big_sale_banner.png'), // Update image
+                fit: BoxFit.cover,
               ),
             ),
             child: Column(
