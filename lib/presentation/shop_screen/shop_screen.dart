@@ -59,7 +59,7 @@ class ShopScreen extends StatelessWidget {
       case AppRoutes.shopInitialPage:
         return ShopInitialPage();
       case AppRoutes.categoriesFilterScreen:
-        return CategoriesFilterScreen(); // Ensure this screen is implemented
+        return CategoriesFilterScreen(); 
       default:
         return Center(
           child: Text(
