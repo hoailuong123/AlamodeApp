@@ -35,8 +35,9 @@ class CategoryService {
         .where((category) => category.parent != null)
         .map((category) => category.parent!)
         .toSet();
-    final missingParents = allCategories.where((cat) => parentIds.contains(cat.id) == false && parentIds.contains(cat.id));
+    final missingParents = allCategories.where((cat) => !allCategories.any((c) => c.id == cat.id) && parentIds.contains(cat.id));
 
+    allCategories.addAll(missingParents);
 
     return allCategories;
   }
@@ -53,8 +54,6 @@ class CategoryService {
             '$baseUrl/api/categories/$parentId/sub-categories/?page=$page'),
       );
 
-      print(
-          'Fetching subcategories for parentId=$parentId, page=$page'); // Thêm log
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);

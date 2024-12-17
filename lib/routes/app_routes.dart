@@ -13,8 +13,7 @@ import '../presentation/start_screen/start_screen.dart';
 import '../presentation/shipping_address_screen/shipping_address_screen.dart';
 import '../presentation/settings_profile_screen/settings_profile_screen.dart';
 import '../presentation/settings_full_screen/settings_full_screen.dart';
-
-
+import '../presentation/subcategory_products_screen/subcategory_products_screen.dart';
 
 class AppRoutes {
   static const String startScreen = '/';
@@ -41,7 +40,6 @@ class AppRoutes {
   static const String voucherTabScreen = '/vouchers_tab_page';
   static const String settingsProfileScreen = '/settings_profile_screen';
   static const String settingsFullScreen = '/settings_full_screen';
-
   static const String settingsAddCardScreen = '/settings_add_card_screen';
   static const String paymentMethodsHistoryScreen = '/payment_methods_history_screen';
   static const String shippingAddressScreen = '/shipping_address_screen';
@@ -50,10 +48,7 @@ class AppRoutes {
   static const String productScreen = '/product_screen';
   static const String productVariationScreen = '/product_variation_screen';
   static const String paymentScreen = '/payment_screen';
-
-
-
-
+  static const String subCategoryProductsScreen = '/subcat_products_screen';
   static const String initialRoute = '/initialRoute';
 
   static Map<String, Widget Function(BuildContext)> routes = {
@@ -61,6 +56,7 @@ class AppRoutes {
     createAccountScreen: (context) => CreateAccountScreen(),
     loginScreen: (context) => LoginScreen(),
     categoriesFilterScreen: (context) => CategoriesFilterScreen(),
+    subCategoryProductsScreen: (context) => SubCategoryProductsScreen(subCategoryId: '1'),
     // passwordScreen: (context) => PasswordScreen(),
     // passwordTypingScreen: (context) => PasswordTypingScreen(),
     // fullProfilePage: (context) => FullProfilePage(),
@@ -90,7 +86,6 @@ class AppRoutes {
     shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
     paymentScreen: (context) => PaymentScreen(),
-
     initialRoute: (context) => AppNavigationScreen(),
   };
 }

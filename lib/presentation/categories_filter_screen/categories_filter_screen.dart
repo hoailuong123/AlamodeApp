@@ -110,7 +110,7 @@ class _CategoriesFilterScreenState extends State<CategoriesFilterScreen> {
                             onTap: () {
                               Navigator.pushNamed(
                                 context,
-                                AppRoutes.subCategoryProductsScreen, // Updated route
+                                AppRoutes.subCategoryProductsScreen, 
                                 arguments: subCat,
                               );
                             },
