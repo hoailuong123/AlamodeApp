@@ -29,6 +29,7 @@ dependencies:
   connectivity_plus: ^5.0.2
   http: ^1.1.2
   shared_preferences: ^2.0.13
+  image_picker: ^1.0.4
 
   intl: any
 dev_dependencies:

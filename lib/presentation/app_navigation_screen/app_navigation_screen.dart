@@ -128,6 +128,12 @@ class AppNavigationScreen extends StatelessWidget {
                           onTapScreenTitle: () => onTapScreenTitle(
                               context, AppRoutes.orderListScreen),
                         ),
+                        _buildScreenTitle(
+                          context,
+                          screenTitle: "Search Image",
+                          onTapScreenTitle: () => onTapScreenTitle(
+                              context, AppRoutes.imageSearchScreen),
+                        ),
                       ],
                     ),
                   ),
