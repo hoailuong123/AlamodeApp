@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 
 
+
 class SliderItem extends StatelessWidget {
   const SliderItem({Key? key}) : super(key: key);
 
@@ -14,7 +15,7 @@ class SliderItem extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           CustomImageView(
-            imagePath: 'assets/images/slider1.png', // Update image path
+            imagePath: ImageConstant.imgProduct5,
             height: 130.h,
             width: double.maxFinite,
             radius: BorderRadius.circular(8.h),
@@ -28,8 +29,10 @@ class SliderItem extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/big_sale_banner.png'), // Update image
-                fit: BoxFit.cover,
+                image: fs.Svg(
+                  ImageConstant.imgProduct5,
+                ),
+                fit: BoxFit.fill,
               ),
             ),
             child: Column(

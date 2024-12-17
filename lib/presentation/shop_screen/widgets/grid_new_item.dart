@@ -54,7 +54,7 @@ class GridNewItemWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         children: [
                           CustomImageView(
-                            imagePath: ImageConstant.img,
+                            imagePath: ImageConstant.imgProduct3,
                             height: 128.h,
                             width: 130.h,
                             radius: BorderRadius.circular(
@@ -62,7 +62,7 @@ class GridNewItemWidget extends StatelessWidget {
                             ),
                           ),
                           CustomImageView(
-                            imagePath: ImageConstant.img,
+                            imagePath: ImageConstant.imgProduct4,
                             height: 128.h,
                             width: 130.h,
                             radius: BorderRadius.circular(

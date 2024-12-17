@@ -73,6 +73,16 @@ class ProductModel {
     List<ImageModel> imageList =
     imagesFromJson.map((i) => ImageModel.fromJson(i)).toList();
 
+    String extractedMainImage = '';
+    if (json['images'] != null && json['images'] is List) {
+      final images = json['images'] as List;
+      final mainImage = images.firstWhere(
+        (img) => img['is_main'] == true,
+        orElse: () => null,
+      );
+      extractedMainImage = mainImage != null ? mainImage['image'] : '';
+    }
+
     var stockVariantsFromJson = json['stock_variants'] as List;
     List<StockVariantModel> stockVariantList =
     stockVariantsFromJson.map((sv) => StockVariantModel.fromJson(sv)).toList();
@@ -102,13 +112,16 @@ class ProductModel {
       isFeatured: json['is_featured'],
       isNewArrival: json['is_new_arrival'],
       isOnSale: json['is_on_sale'],
-      mainImage: json['main_image'],
+      // mainImage: json['main_image'],
       videoUrl: json['video_url'],
       metaTitle: json['meta_title'],
       metaDescription: json['meta_description'],
       images: imageList,
       stockVariants: stockVariantList,
       tags: json['tags'],
+      mainImage: extractedMainImage.isNotEmpty
+          ? extractedMainImage
+          : 'assets/images/placeholder.png', // Fallback placeholder
     );
   }
 }
