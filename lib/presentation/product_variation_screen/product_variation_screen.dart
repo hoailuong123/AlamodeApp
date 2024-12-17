@@ -1,3 +1,4 @@
+import 'package:alamodeapp/core/app_export.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +7,7 @@ import 'dart:convert';
 import '/services/product_service.dart';
 import '/models/product_model.dart';
 import '/widgets/custom_elevated_button.dart';
+import '/presentation/cart_page/cart_page.dart';
 
 class ProductVariationScreen extends StatefulWidget {
   final int productId;
@@ -40,48 +42,54 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
 
   // Hàm thêm sản phẩm vào giỏ hàng
   Future<void> _addToCart(ProductModel product) async {
-    final url = 'https://included-sheepdog-slowly.ngrok-free.app/api/cart/create/';
-    final payload = {
-      "product": product.id,
-      "quantity": quantity,
-      "size": sizes[selectedSizeIndex],
-      "color": colors[selectedColorIndex],
-    };
+  final url = 'https://included-sheepdog-slowly.ngrok-free.app/api/cart/create/';
+  final payload = {
+    "product": product.id,
+    "quantity": quantity,
+    "size": sizes[selectedSizeIndex], // Ensure `selectedSizeIndex` is valid
+    "color": colors[selectedColorIndex], // Ensure `selectedColorIndex` is valid
+  };
 
-    try {
-      final token = await _getAccessToken(); // Lấy token từ SharedPreferences
+  try {
+    final token = await _getAccessToken(); // Get token from SharedPreferences
 
-      if (token == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User is not authenticated. Please login again.')),
-        );
-        return;
-      }
+    if (token == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('User is not authenticated. Please login again.')),
+      );
+      return;
+    }
 
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token', // Thêm Bearer Auth vào header
-        },
-        body: jsonEncode(payload),
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(payload),
+    );
+
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Product added to cart successfully!')),
       );
 
-      if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Product added to cart successfully!')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add product to cart.')),
-        );
-      }
-    } catch (e) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CartScreen()),
+      );
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text('Failed to add product to cart.')),
       );
     }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -249,13 +257,21 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
   }
 
   Widget _buildBottomBar(ProductModel product) {
-    return Container(
-      height: 60,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: CustomElevatedButton(
-        text: "Add to Cart",
-        onPressed: () => _addToCart(product),
+  return Container(
+    height: 60,
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+      onPressed: () {
+        _addToCart(product);
+      },
+      child: Text(
+        "Add to Cart",
+        style: TextStyle(color: Colors.white, fontSize: 16),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 }
