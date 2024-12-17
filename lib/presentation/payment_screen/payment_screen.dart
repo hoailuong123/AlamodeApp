@@ -1,5 +1,8 @@
 import 'package:alamodeapp/presentation/payment_screen/widgets/payment_popup.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'widgets/shipping_address_popup.dart';
 import 'widgets/contact_information_popup.dart';
 import 'widgets/payment_method_popup.dart';
@@ -9,7 +12,10 @@ import '../../../core/app_export.dart';
 import 'widgets/list_product.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({Key? key}) : super(key: key);
+  const PaymentScreen({Key? key, required this.cartItems,
+    required this.totalAmount,}) : super(key: key);
+  final List<dynamic> cartItems; // Danh sách sản phẩm
+  final double totalAmount; // Tổng tiền
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -30,6 +36,43 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   // Payment Method
   String _selectedPaymentMethod = "MasterCard ****1579";
+
+  // Product List
+  List<dynamic> _cartItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCartItems();
+  }
+
+  Future<void> _fetchCartItems() async {
+    final url = Uri.parse(
+        'https://included-sheepdog-slowly.ngrok-free.app/api/cart/detail/');
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('access_token');
+
+    if (token == null) return;
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        setState(() {
+          _cartItems = jsonData['items'];
+        });
+      }
+    } catch (e) {
+      print("Error fetching cart items: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +98,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       "$_country",
                       style: theme.textTheme.bodyMedium,
                     ),
-                    const SizedBox(height: 8),
                     _buildAddressEditIcon(context),
                   ],
                 ),
@@ -97,14 +139,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildBadge("2"),
+                  _buildBadge("${_cartItems.length}"),
                   TextButton(onPressed: () {}, child: Text("Add Voucher")),
                 ],
               ),
               const SizedBox(height: 8),
-              ListplayOne2ItemWidget(),
-              const SizedBox(height: 8),
-              ListplayOne2ItemWidget(),
+              // Hiển thị danh sách sản phẩm
+              ..._cartItems
+                  .map((product) => ListProductItemWidget(product: product)),
               const SizedBox(height: 16),
               _buildSectionTitle("Shipping Options"),
               _buildShippingOptions(),
@@ -168,30 +210,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Widget _buildAddressEditIcon(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final result = await ShippingAddressPopup.show(context);
-        if (result != null) {
-          setState(() {
-            _country = result['Country'] ?? _country;
-            _city = result['Town/City'] ?? _city;
-            _address = result['Address'] ?? _address;
-          });
-        }
-      },
-      child: _buildEditIcon(),
-    );
-  }
-
-  Widget _buildEditIcon() {
-    return CircleAvatar(
-      radius: 14,
-      backgroundColor: appTheme.indigo50,
-      child: Icon(Icons.edit, color: Colors.blue, size: 18),
-    );
-  }
-
   Widget _buildBadge(String count) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -202,67 +220,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Text(
         count,
         style: CustomTextStyles.titleMediumBlack900,
-      ),
-    );
-  }
-
-  Widget _buildShippingOptions() {
-    return Column(
-      children: [
-        _buildShippingOption("Standard", "5-7 days", "FREE",
-            _selectedShippingOption == "Standard"),
-        const SizedBox(height: 8),
-        _buildShippingOption("Express", "1-2 days", "\$12,00",
-            _selectedShippingOption == "Express"),
-      ],
-    );
-  }
-
-  Widget _buildShippingOption(
-      String title, String duration, String price, bool isSelected) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedShippingOption = title;
-        });
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: isSelected ? appTheme.indigo50 : Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSelected ? Colors.blue : Colors.grey.shade300,
-            width: 1,
-          ),
-        ),
-        padding: EdgeInsets.all(12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Radio<String>(
-                  value: title,
-                  groupValue: _selectedShippingOption,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedShippingOption = value!;
-                    });
-                  },
-                  activeColor: Colors.blue,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: CustomTextStyles.titleMediumBlack900),
-                    Text(duration, style: theme.textTheme.bodySmall),
-                  ],
-                ),
-              ],
-            ),
-            Text(price, style: CustomTextStyles.titleMediumBlack900),
-          ],
-        ),
       ),
     );
   }
@@ -290,6 +247,90 @@ class _PaymentScreenState extends State<PaymentScreen> {
             padding: const EdgeInsets.symmetric(vertical: 12)),
         height: 50.h,
         text: "Payment",
+      ),
+    );
+  }
+
+  Widget _buildAddressEditIcon(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final result = await ShippingAddressPopup.show(context);
+        if (result != null) {
+          setState(() {
+            _country = result['Country'] ?? _country;
+            _city = result['Town/City'] ?? _city;
+            _address = result['Address'] ?? _address;
+          });
+        }
+      },
+      child: _buildEditIcon(),
+    );
+  }
+
+  Widget _buildEditIcon() {
+    return CircleAvatar(
+      radius: 14,
+      backgroundColor: appTheme.indigo50,
+      child: Icon(Icons.edit, color: Colors.blue, size: 18),
+    );
+  }
+
+  Widget _buildShippingOptions() {
+    return Column(
+      children: [
+        _buildShippingOption("Standard", "5-7 days", "FREE",
+            _selectedShippingOption == "Standard"),
+        const SizedBox(height: 8),
+        _buildShippingOption("Express", "1-2 days", "\$12,00",
+            _selectedShippingOption == "Express"),
+      ],
+    );
+  }
+
+  Widget _buildShippingOption(
+      String title, String duration, String price, bool isSelected) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedShippingOption = title;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected ? appTheme.indigo50 : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? Colors.blue : Colors.grey.shade300,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Radio<String>(
+                  value: title,
+                  groupValue: _selectedShippingOption,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedShippingOption = value!;
+                    });
+                  },
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: CustomTextStyles.titleMediumBlack900),
+                    Text(duration, style: theme.textTheme.bodySmall),
+                  ],
+                ),
+              ],
+            ),
+            Text(price, style: CustomTextStyles.titleMediumBlack900),
+          ],
+        ),
       ),
     );
   }

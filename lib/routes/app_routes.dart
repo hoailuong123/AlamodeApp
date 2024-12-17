@@ -89,7 +89,7 @@ class AppRoutes {
     // paymentMethodsHistoryScreen: (context) => PaymentMethodsHistoryScreen(),
     shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
-    paymentScreen: (context) => PaymentScreen(),
+    paymentScreen: (context) => PaymentScreen(cartItems: [],totalAmount: double.infinity,),
 
     initialRoute: (context) => AppNavigationScreen(),
   };
