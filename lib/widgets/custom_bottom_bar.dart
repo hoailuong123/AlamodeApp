@@ -21,16 +21,12 @@ class CustomBottomBarState extends State<CustomBottomBar> {
         activeIcon: ImageConstant.imgGroup1950,
         type: BottomBarEnum.loremipsumdolorsitametconsectetur),
     BottomMenuModel(
-        icon: ImageConstant.imgFavoritePrimary,
-        activeIcon: ImageConstant.imgFavoritePrimary,
+        icon: ImageConstant.imgBagPrimary,
+        activeIcon: ImageConstant.imgBagPrimary,
         type: BottomBarEnum.loremipsumdolor3),
     BottomMenuModel(
         icon: ImageConstant.imgCategories,
         activeIcon: ImageConstant.imgCategories,
-        type: BottomBarEnum.loremipsumdolor3),
-    BottomMenuModel(
-        icon: ImageConstant.imgBagPrimary,
-        activeIcon: ImageConstant.imgBagPrimary,
         type: BottomBarEnum.loremipsumdolor3),
     BottomMenuModel(
         icon: ImageConstant.imgLockPrimary,
