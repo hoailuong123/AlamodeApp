@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:alamodeapp/presentation/product_variation_screen/product_variation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -6,6 +8,9 @@ import '../../models/product_model.dart';
 import '../../theme/custom_text_style.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../../theme/custom_button_style.dart';
+import '/presentation/cart_page/widgets/cart_manager.dart';
+import '/presentation/cart_page/cart_page.dart';
+import '/presentation/product_variation_screen/product_variation_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   final int productid; // Required product ID
@@ -34,7 +39,7 @@ class _ProductScreenState extends State<ProductScreen> {
           title: Text("Product Details"),
         ),
         body: FutureBuilder<ProductModel>(
-          future: _productDetailFuture,
+          future: _productDetailFuture, 
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -50,7 +55,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     _buildProductInfo(product),
                     _buildDescription(product),
                     _buildDetailsSection(product),
-                    _buildBottomBar(),
+                    _buildBottomBar(product),
                   ],
                 ),
               );
@@ -60,6 +65,14 @@ class _ProductScreenState extends State<ProductScreen> {
         ),
       ),
     );
+  }
+
+  String calculateDiscount(String originalPrice, String? salePrice) {
+    if (salePrice == null || salePrice == "null") return "0";
+    double original = double.parse(originalPrice);
+    double sale = double.parse(salePrice);
+    double discount = ((original - sale) / original) * 100;
+    return discount.toStringAsFixed(0);
   }
 
   Widget _buildImageSlider(ProductModel product) {
@@ -87,18 +100,74 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Widget _buildProductInfo(ProductModel product) {
+    // Helper to calculate discount percentage
+    String calculateDiscount(String originalPrice, String? salePrice) {
+      if (salePrice == null || salePrice == "null") return "0";
+      double original = double.parse(originalPrice);
+      double sale = double.parse(salePrice);
+      double discount = ((original - sale) / original) * 100;
+      return discount.toStringAsFixed(0);
+    }
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Sale Price Section (Only if sale price exists)
+          if (product.salePrice != null && product.salePrice != "null") ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Sale Price
+                Text(
+                  "\$${product.salePrice}",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                // Discount Percentage
+                Text(
+                  "-${calculateDiscount(product.price, product.salePrice!)}%",
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 4),
+            // Original Price with Strikethrough
+            Text(
+              "\$${product.price}",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
+          ] else
+            // Regular Price (No Sale)
+            Text(
+              "\$${product.price}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+
+          SizedBox(height: 8),
+
+          // Product Name
           Text(
-            "\$${product.price}",
-            style: CustomTextStyles.titleLargeBlack900,
-          ),
-          Text(
-            "Stock: ${product.stock}",
-            style: TextStyle(color: Colors.grey),
+            product.name,
+            style: TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
         ],
       ),
@@ -107,7 +176,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Widget _buildDescription(ProductModel product) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(10.0),
       child: Text(
         product.description,
         style: TextStyle(fontSize: 14, color: Colors.grey[700]),
@@ -121,7 +190,7 @@ class _ProductScreenState extends State<ProductScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Product Details", style: CustomTextStyles.titleMediumBlack900Medium),
+          Text("Product Details", style: CustomTextStyles.titleLarge20),
           SizedBox(height: 8),
           Text("Brand: ${product.brand}"),
           Text("Material: ${product.material}"),
@@ -133,7 +202,7 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar(ProductModel product) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -149,14 +218,21 @@ class _ProductScreenState extends State<ProductScreen> {
       child: Row(
         children: [
           Expanded(
-            child: CustomElevatedButton(
-              text: "Add to Cart",
-              buttonStyle: CustomButtonStyles.fillGrayTL10,
-              onPressed: () {
-                // Handle Add to Cart logic
-              },
-            ),
-          ),
+  child: CustomElevatedButton(
+    text: "Add to Cart",
+    buttonStyle: CustomButtonStyles.fillGrayTL10,
+    onPressed: () {
+      // Navigate to Product Variation Screen with productId
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProductVariationScreen(productId: product.id),
+        ),
+      );
+    },
+  ),
+),
+
           SizedBox(width: 8),
           Expanded(
             child: CustomElevatedButton(

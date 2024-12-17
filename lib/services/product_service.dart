@@ -43,6 +43,7 @@ class ProductService {
       throw Exception("Failed to load products.");
     }
   }
+
   Future<ProductModel> fetchProductDetail(int productId) async {
     final url = Uri.parse('$baseUrl/api/product/detail/$productId/');
     final response = await http.get(url);
@@ -52,6 +53,28 @@ class ProductService {
       return ProductModel.fromJson(data);
     } else {
       throw Exception("Failed to load product details");
+    }
+  }
+
+  Future<List<ProductModel>> fetchSaleProducts({int limit = 10}) async {
+    final url = Uri.parse('$baseUrl/api/product/list/?page_size=50');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final results = data['results'] as List;
+
+      List<ProductModel> allProducts = results.map((productJson) {
+        return ProductModel.fromJson(productJson);
+      }).toList();
+
+      List<ProductModel> saleProducts = allProducts.where((product) {
+        return product.salePrice != null && product.salePrice != "null";
+      }).toList();
+
+      return saleProducts.take(limit).toList();
+    } else {
+      throw Exception("Failed to load sale products.");
     }
   }
 }

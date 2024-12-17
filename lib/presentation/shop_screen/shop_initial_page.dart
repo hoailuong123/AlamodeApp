@@ -20,6 +20,7 @@ import 'widgets/recommend_item.dart';
 import 'widgets/slider_item.dart';
 import '/services/category_service.dart';
 import '/models/product_model.dart';
+import '/presentation/product_screen/product_screen.dart';
 
 class ShopInitialPage extends StatefulWidget {
   const ShopInitialPage({Key? key}) : super(key: key);
@@ -62,15 +63,15 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                     _buildBigSaleBanner(context),
                     SizedBox(height: 18.h),
                     GridCategories(),
-                    SizedBox(height: 28.h),
-                    _buildTopProductsSection(context),
+                    // SizedBox(height: 28.h),
+                    // _buildTopProductsSection(context),
                     SizedBox(height: 48.h),
                     _buildNewItemsSection(context),
                     SizedBox(height: 24.h),
                     _buildFlashSaleSection(context),
                     SizedBox(height: 24.h),
-                    _buildJustForYouSection(context),
-                    SizedBox(height: 26.h),
+                    // _buildJustForYouSection(context),
+                    // SizedBox(height: 26.h),
                     _buildRowtitlenine(context),
                     SizedBox(height: 10.h),
                     _buildRecommendedProductsGrid(context)
@@ -209,39 +210,39 @@ class ShopInitialPageState extends State<ShopInitialPage> {
     );
   }
 
-  /// Section Widget
-  Widget _buildTopProductsSection(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      margin: EdgeInsets.symmetric(horizontal: 20.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Top Products",
-            style: theme.textTheme.titleLarge,
-          ),
-          SizedBox(height: 8.h),
-          Container(
-            width: double.maxFinite,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Wrap(
-                direction: Axis.horizontal,
-                spacing: 8.h,
-                children: List.generate(
-                  5, // Cập nhật số lượng sản phẩm nếu cần
-                  (index) {
-                    return OneItemWidget();
-                  },
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // /// Section Widget
+  // Widget _buildTopProductsSection(BuildContext context) {
+  //   return Container(
+  //     width: double.maxFinite,
+  //     margin: EdgeInsets.symmetric(horizontal: 20.h),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           "Top Products",
+  //           style: theme.textTheme.titleLarge,
+  //         ),
+  //         SizedBox(height: 8.h),
+  //         Container(
+  //           width: double.maxFinite,
+  //           child: SingleChildScrollView(
+  //             scrollDirection: Axis.horizontal,
+  //             child: Wrap(
+  //               direction: Axis.horizontal,
+  //               spacing: 8.h,
+  //               children: List.generate(
+  //                 5, // Cập nhật số lượng sản phẩm nếu cần
+  //                 (index) {
+  //                   return OneItemWidget();
+  //                 },
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   /// Section Widget: New Items
   Widget _buildNewItemsSection(BuildContext context) {
@@ -307,136 +308,105 @@ class ShopInitialPageState extends State<ShopInitialPage> {
 
   /// Section Widget
   Widget _buildFlashSaleSection(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      margin: EdgeInsets.symmetric(horizontal: 20.h),
-      child: Column(children: [
-        SizedBox(
-          width: double.maxFinite,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Flash Sale",
-                style: theme.textTheme.titleLarge,
-              ),
-              Spacer(),
-              CustomImageView(
-                imagePath: ImageConstant.img,
-                height: 18.h,
-                width: 18.h,
-                alignment: Alignment.topCenter,
-                margin: EdgeInsets.only(top: 2.h),
-              ),
-              Container(
-                width: 32.h,
-                height: 26.h,
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(left: 10.h),
-                decoration: BoxDecoration(
-                  color: appTheme.gray10001,
-                  borderRadius: BorderRadiusStyle.roundedBorder5,
-                ),
-                child: Text(
-                  "00",
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium,
-                ),
-              ),
-              Container(
-                width: 32.h,
-                height: 26.h,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: appTheme.gray10001,
-                  borderRadius: BorderRadiusStyle.roundedBorder5,
-                ),
-                child: Text(
-                  "36",
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium,
-                ),
-              ),
-              Container(
-                width: 32.h,
-                height: 26.h,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: appTheme.gray10001,
-                  borderRadius: BorderRadiusStyle.roundedBorder5,
-                ),
-                child: Text(
-                  "58",
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium,
-                ),
-              ),
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text(
+            "Flash Sale",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
         ),
-        SizedBox(height: 10.h),
-        ResponsiveGridListBuilder(
-          minItemWidth: 1,
-          minItemsPerRow: 3,
-          maxItemsPerRow: 3,
-          horizontalGridMargin: 4.h,
-          verticalGridMargin: 4.h,
-          builder: (context, items) => ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            physics: NeverScrollableScrollPhysics(),
-            children: items,
-          ),
-          gridItems: List.generate(
-            6,
-            (index) {
-              return GridSaleItemWidget();
-            },
-          ),
-        )
-      ]),
+        FutureBuilder<List<ProductModel>>(
+          future: _productService.fetchSaleProducts(limit: 6),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text("Failed to load sale products"));
+            } else if (snapshot.hasData) {
+              final saleProducts = snapshot.data!;
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 12.0,
+                    crossAxisSpacing: 12.0,
+                    childAspectRatio: 0.7,
+                  ),
+                  itemCount: saleProducts.length,
+                  itemBuilder: (context, index) {
+                    final product = saleProducts[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductScreen(productid: product.id),
+                          ),
+                        );
+                      },
+                      child: GridSaleItemWidget(product: product),
+                    );
+                  },
+                ),
+              );
+            }
+            return SizedBox();
+          },
+        ),
+      ],
     );
   }
 
-  /// Section Widget
-  Widget _buildJustForYouSection(BuildContext context) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.maxFinite,
-                margin: EdgeInsets.only(right: 8.h),
-                child: _buildMostPopularSection(context,
-                    titleText: "Most Popular"),
-              ),
-              SizedBox(height: 8.h),
-              Container(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    spacing: 6.h,
-                    children: List.generate(
-                      4,
-                      (index) {
-                        return MostPopularItemWidget();
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // /// Section Widget
+  // Widget _buildJustForYouSection(BuildContext context) {
+  //   return SizedBox(
+  //     width: double.maxFinite,
+  //     child: Align(
+  //       alignment: Alignment.centerLeft,
+  //       child: Padding(
+  //         padding: EdgeInsets.only(left: 20.h),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Container(
+  //               width: double.maxFinite,
+  //               margin: EdgeInsets.only(right: 8.h),
+  //               child: _buildMostPopularSection(context,
+  //                   titleText: "Most Popular"),
+  //             ),
+  //             SizedBox(height: 8.h),
+  //             Container(
+  //               child: SingleChildScrollView(
+  //                 scrollDirection: Axis.horizontal,
+  //                 child: Wrap(
+  //                   direction: Axis.horizontal,
+  //                   spacing: 6.h,
+  //                   children: List.generate(
+  //                     4,
+  //                     (index) {
+  //                       return MostPopularItemWidget();
+  //                     },
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   /// Section Widget
   Widget _buildRowtitlenine(BuildContext context) {
