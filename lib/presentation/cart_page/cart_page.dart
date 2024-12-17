@@ -44,8 +44,11 @@ class _CartScreenState extends State<CartScreen> {
         final jsonData = jsonDecode(response.body);
         if (jsonData.containsKey('items')) {
           setState(() {
-            _total = jsonData['items']
-                .fold(0.0, (sum, item) => sum + 17.0 * item['quantity']);
+            _total = jsonData['items'].fold(0.0, (sum, item) {
+              final quantity =
+                  (item['quantity'] as num?) ?? 0; 
+              return sum + 1.0 * quantity; 
+            });
           });
           return jsonData['items'] as List<dynamic>;
         } else {
@@ -59,23 +62,35 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
-  void _incrementQuantity(Map<String, dynamic> product) {
+  void _recalculateTotal(List<dynamic> cartItems) {
     setState(() {
-      product['quantity']++;
-      _total += 17.0; // Giá tạm thời cố định
+      _total = cartItems.fold(0.0, (sum, product) {
+        final price = (product['price'] as num?) ?? 0.0;
+        final quantity = (product['quantity'] as int?) ?? 0;
+        return sum + (price * quantity);
+      });
     });
   }
 
-  void _decrementQuantity(Map<String, dynamic> product) {
-    if (product['quantity'] > 1) {
+  void _incrementQuantity(
+      Map<String, dynamic> product, List<dynamic> cartItems) {
+    setState(() {
+      product['quantity'] = (product['quantity'] as int? ?? 0) + 1;
+      _recalculateTotal(cartItems);
+    });
+  }
+
+  void _decrementQuantity(
+      Map<String, dynamic> product, List<dynamic> cartItems) {
+    if ((product['quantity'] as int? ?? 1) > 1) {
       setState(() {
-        product['quantity']--;
-        _total -= 17.0;
+        product['quantity'] = (product['quantity'] as int? ?? 1) - 1;
+        _recalculateTotal(cartItems);
       });
     }
   }
 
-  Widget _buildCartItem(Map<String, dynamic> product) {
+  Widget _buildCartItem(Map<String, dynamic> product, List<dynamic> cartItems) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: EdgeInsets.all(12),
@@ -120,7 +135,7 @@ class _CartScreenState extends State<CartScreen> {
                     style: TextStyle(color: Colors.grey)),
                 SizedBox(height: 8),
                 Text(
-                  "\$17.00", // Giá tạm thời cố định
+                  "\$${(product['price'] as num?)?.toStringAsFixed(2) ?? '0.00'}",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -133,16 +148,15 @@ class _CartScreenState extends State<CartScreen> {
                 children: [
                   IconButton(
                     icon: Icon(Icons.remove_circle_outline, color: Colors.blue),
-                    onPressed: () => _decrementQuantity(product),
+                    onPressed: () => _decrementQuantity(product, cartItems),
                   ),
                   Text(
                     "${product['quantity']}",
-                    style:
-                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
                     icon: Icon(Icons.add_circle_outline, color: Colors.blue),
-                    onPressed: () => _incrementQuantity(product),
+                    onPressed: () => _incrementQuantity(product, cartItems),
                   ),
                 ],
               ),
@@ -167,21 +181,25 @@ class _CartScreenState extends State<CartScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Total", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text("Total",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           Text("\$${_total.toStringAsFixed(2)}",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ElevatedButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        PaymentScreen(cartItems: [], totalAmount: _total),
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PaymentScreen(
+                    cartItems: [], // Truyền danh sách nếu cần
+                    totalAmount: _total,
                   ),
-                );
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-            child: Text("Payment", style: TextStyle(color: Colors.white,fontSize: 18)),
+            child: Text("Payment",
+                style: TextStyle(color: Colors.white, fontSize: 18)),
           ),
         ],
       ),
@@ -212,7 +230,7 @@ class _CartScreenState extends State<CartScreen> {
                   return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-                      return _buildCartItem(items[index]);
+                      return _buildCartItem(items[index], items);
                     },
                   );
                 }

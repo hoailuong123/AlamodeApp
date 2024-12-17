@@ -224,12 +224,11 @@ class _ProductScreenState extends State<ProductScreen> {
               text: "Add to Cart",
               buttonStyle: CustomButtonStyles.fillGrayTL10,
               onPressed: () {
-                // Navigate to Product Variation Screen with productId
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        ProductVariationScreen(productId: product.id),
+                        CartScreen(),
                   ),
                 );
               },
@@ -241,7 +240,6 @@ class _ProductScreenState extends State<ProductScreen> {
               text: "Buy Now",
               buttonStyle: CustomButtonStyles.fillPrimary,
               onPressed: () {
-                // Tạo danh sách chỉ chứa sản phẩm hiện tại
                 final selectedProduct = {
                   'product_name': product.name,
                   'image': product.mainImage,
