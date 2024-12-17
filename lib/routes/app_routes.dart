@@ -10,6 +10,7 @@ import '../presentation/categories_filter_screen/categories_filter_screen.dart';
 import '../presentation/login_screen/login_screen.dart';
 import '../presentation/create_account_screen/create_account_screen.dart';
 import '../presentation/order_list/order_list.dart';
+import '../presentation/search_image/search_image_screen.dart';
 import '../presentation/start_screen/start_screen.dart';
 import '../presentation/shipping_address_screen/shipping_address_screen.dart';
 import '../presentation/settings_profile_screen/settings_profile_screen.dart';
@@ -89,6 +90,7 @@ class AppRoutes {
     shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
     paymentScreen: (context) => PaymentScreen(cartItems: [],totalAmount: double.infinity,),
+    imageSearchScreen: (context) => SearchImageScreen(),
 
     initialRoute: (context) => AppNavigationScreen(),
   };

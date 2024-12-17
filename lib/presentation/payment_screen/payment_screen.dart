@@ -47,6 +47,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
 void initState() {
   super.initState();
+  _fetchCartItems(); // Lấy danh sách sản phẩm từ API
   _cartItems = widget.cartItems; // Chỉ dùng cartItems truyền vào
   _totalAmount = _calculateTotal(_cartItems); // Tính tổng từ cartItems
 }
@@ -79,6 +80,82 @@ void initState() {
       print("Error fetching cart items: $e");
     }
     if (_cartItems.isNotEmpty) return;
+  }
+
+  Future<void> _createOrder() async {
+    final url = Uri.parse('https://included-sheepdog-slowly.ngrok-free.app/api/orders/create/');
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('access_token');
+
+    if (token == null) {
+      print("No token found. Please log in again.");
+      return;
+    }
+
+    // Tạo payload đơn hàng
+    final Map<String, dynamic> payload = {
+      "customer": 1,
+      "subtotal_price": _calculateTotal(_cartItems),
+      "shipping_cost": _selectedShippingOption == "Express" ? 24 : 12,
+      "discount_amount": 0,
+      "tax_amount": 0,
+      "total_price": _calculateTotal(_cartItems) +
+          (_selectedShippingOption == "Express" ? 12 : 0),
+      "total_weight": 0,
+      "shipping_address": 1,
+      "billing_address": 1,
+      "shipping_method": _selectedShippingOption.toUpperCase(),
+      "payment_method": _selectedPaymentMethod == "MasterCard ****1579" ? "CREDIT_CARD" : "COD",
+      "note": ""
+    };
+
+    if (_cartItems.isNotEmpty) {
+      payload["items"] = _cartItems.map((product) {
+        return {
+          "product": product['product'],
+          "quantity": product['quantity'].toString(),
+          "price": (product['price'] as num?)?.toStringAsFixed(2) ?? "0.00",
+          "total_price": ((product['price'] as num?) ?? 0.0) *
+              (product['quantity'] as int? ?? 0),
+          "size": product['size'] ?? "",
+          "color": product['color'] ?? "",
+          "productName": product['product_name'] ?? "",
+          "main_image": product['image'] ?? "",
+        };
+      }).toList();
+    }
+
+    print("Payload: $payload");
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(payload),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        print("Order created successfully!");
+        PaymentPopup.show(context); // Hiển thị popup khi thành công
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Order created successfully!")),
+        );
+      } else {
+        print("Failed to create order: ${response.statusCode}");
+        print("Response: ${response.body}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to create order. Please try again!")),
+        );
+      }
+    } catch (e) {
+      print("Error creating order: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error creating order. Please check your network!")),
+      );
+    }
   }
 
   @override
@@ -245,9 +322,9 @@ void initState() {
 
   double _calculateTotal(List<dynamic> cartItems) {
     return cartItems.fold(0.0, (sum, product) {
-      final price = (product['price'] as num?) ?? 0.0;
+      final price = ((product['price'] as num?) ?? 0.0).toDouble();
       final quantity = (product['quantity'] as int?) ?? 1;
-      return sum + (price * quantity);
+      return double.parse((sum + (price * quantity)).toStringAsFixed(2));
     });
   }
 
@@ -255,15 +332,15 @@ void initState() {
     return SizedBox(
       width: double.infinity,
       child: CustomElevatedButton(
-        onPressed: () {
-          PaymentPopup.show(context);
-          print("Selected Payment Method: $_selectedPaymentMethod");
+        onPressed: () async {
+          await _createOrder();
         },
         buttonStyle: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            padding: const EdgeInsets.symmetric(vertical: 12)),
+          backgroundColor: Colors.black,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+        ),
         height: 50.h,
-        text: "Payment",
+        text: "Pay Now",
       ),
     );
   }
