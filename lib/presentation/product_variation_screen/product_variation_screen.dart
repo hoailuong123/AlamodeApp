@@ -1,15 +1,11 @@
-import 'package:alamodeapp/widgets/custom_elevated_button.dart';
-import 'package:flutter/material.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'widgets/item_widget.dart';
-import 'widgets/list_item_widget.dart';
-import 'widgets/list_option_widget.dart';
-import '../../core/app_export.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import '/services/product_service.dart';
 import '/models/product_model.dart';
-import '/presentation/cart_page/widgets/cart_manager.dart';
-
+import '/widgets/custom_elevated_button.dart';
 
 class ProductVariationScreen extends StatefulWidget {
   final int productId;
@@ -23,10 +19,11 @@ class ProductVariationScreen extends StatefulWidget {
 class _ProductVariationScreenState extends State<ProductVariationScreen> {
   late Future<ProductModel> _productDetail;
   int selectedColorIndex = 0;
-  int selectedSizeIndex = 1;
+  int selectedSizeIndex = 0;
   int quantity = 1;
 
   final List<String> sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
+  final List<String> colors = ["Red", "Blue", "Green", "Yellow"];
   final ProductService _productService = ProductService();
 
   @override
@@ -35,10 +32,62 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
     _productDetail = _productService.fetchProductDetail(widget.productId);
   }
 
+  // Hàm lấy token từ SharedPreferences
+  Future<String?> _getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
+  }
+
+  // Hàm thêm sản phẩm vào giỏ hàng
+  Future<void> _addToCart(ProductModel product) async {
+    final url = 'https://included-sheepdog-slowly.ngrok-free.app/api/cart/create/';
+    final payload = {
+      "product": product.id,
+      "quantity": quantity,
+      "size": sizes[selectedSizeIndex],
+      "color": colors[selectedColorIndex],
+    };
+
+    try {
+      final token = await _getAccessToken(); // Lấy token từ SharedPreferences
+
+      if (token == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User is not authenticated. Please login again.')),
+        );
+        return;
+      }
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token', // Thêm Bearer Auth vào header
+        },
+        body: jsonEncode(payload),
+      );
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Product added to cart successfully!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add product to cart.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(title: Text("Product Details")),
         body: FutureBuilder<ProductModel>(
           future: _productDetail,
           builder: (context, snapshot) {
@@ -55,16 +104,16 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildImageSlider(context, product),
-                          _buildPriceAndVariationSection(context, product),
-                          _buildColorOptions(context),
-                          _buildSizeOptions(context),
-                          _buildQuantitySelector(context),
+                          _buildImageSlider(product),
+                          _buildPriceSection(product),
+                          _buildColorOptions(),
+                          _buildSizeOptions(),
+                          _buildQuantitySelector(),
                         ],
                       ),
                     ),
                   ),
-                  _buildBottomBar(context, product),
+                  _buildBottomBar(product),
                 ],
               );
             }
@@ -75,24 +124,20 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
     );
   }
 
-  Widget _buildImageSlider(BuildContext context, ProductModel product) {
-    return Stack(
-      children: [
-        CarouselSlider.builder(
-          options: CarouselOptions(height: 300, autoPlay: true, viewportFraction: 1.0),
-          itemCount: product.images.length,
-          itemBuilder: (context, index, realIndex) {
-            return Image.network(
-              product.images[index].image,
-              fit: BoxFit.cover,
-            );
-          },
-        ),
-      ],
+  Widget _buildImageSlider(ProductModel product) {
+    return CarouselSlider.builder(
+      itemCount: product.images.length,
+      options: CarouselOptions(height: 300, autoPlay: true),
+      itemBuilder: (context, index, realIndex) {
+        return Image.network(
+          product.images[index].image,
+          fit: BoxFit.cover,
+        );
+      },
     );
   }
 
-  Widget _buildPriceAndVariationSection(BuildContext context, ProductModel product) {
+  Widget _buildPriceSection(ProductModel product) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -102,13 +147,13 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
             "\$${product.salePrice ?? product.price}",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
           ),
-          if (product.salePrice != null) // Show original price if sale is active
+          if (product.salePrice != null)
             Text(
               "\$${product.price}",
               style: TextStyle(
                 fontSize: 18,
-                decoration: TextDecoration.lineThrough,
                 color: Colors.grey,
+                decoration: TextDecoration.lineThrough,
               ),
             ),
           SizedBox(height: 8),
@@ -118,63 +163,53 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
     );
   }
 
-  Widget _buildColorOptions(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text("Color Options", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        ),
-        Row(
-          children: List.generate(
-            4,
-            (index) => GestureDetector(
-              onTap: () => setState(() => selectedColorIndex = index),
-              child: Container(
-                margin: EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: selectedColorIndex == index ? Colors.blue : Colors.transparent,
-                  ),
-                ),
-                child: Image.network(
-                  'https://via.placeholder.com/50', // Replace with actual color image
-                  width: 50,
-                  height: 50,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+  Widget _buildColorOptions() {
+    return _buildOptionsSection(
+      title: "Color Options",
+      options: colors,
+      selectedIndex: selectedColorIndex,
+      onTap: (index) => setState(() => selectedColorIndex = index),
     );
   }
 
-  Widget _buildSizeOptions(BuildContext context) {
+  Widget _buildSizeOptions() {
+    return _buildOptionsSection(
+      title: "Size Options",
+      options: sizes,
+      selectedIndex: selectedSizeIndex,
+      onTap: (index) => setState(() => selectedSizeIndex = index),
+    );
+  }
+
+  Widget _buildOptionsSection({
+    required String title,
+    required List<String> options,
+    required int selectedIndex,
+    required void Function(int) onTap,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text("Size", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
         Row(
           children: List.generate(
-            sizes.length,
-            (index) => GestureDetector(
-              onTap: () => setState(() => selectedSizeIndex = index),
+            options.length,
+                (index) => GestureDetector(
+              onTap: () => onTap(index),
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 8),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: selectedSizeIndex == index ? Colors.blue : Colors.grey[200],
+                  color: selectedIndex == index ? Colors.blue : Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  sizes[index],
+                  options[index],
                   style: TextStyle(
-                    color: selectedSizeIndex == index ? Colors.white : Colors.black,
+                    color: selectedIndex == index ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -186,7 +221,7 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
     );
   }
 
-  Widget _buildQuantitySelector(BuildContext context) {
+  Widget _buildQuantitySelector() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -197,7 +232,9 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
             children: [
               IconButton(
                 icon: Icon(Icons.remove),
-                onPressed: () => setState(() => quantity = (quantity > 1) ? quantity - 1 : 1),
+                onPressed: () => setState(() {
+                  if (quantity > 1) quantity--;
+                }),
               ),
               Text("$quantity", style: TextStyle(fontSize: 18)),
               IconButton(
@@ -211,26 +248,14 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
     );
   }
 
-  Widget _buildBottomBar(BuildContext context, ProductModel product) {
+  Widget _buildBottomBar(ProductModel product) {
     return Container(
       height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ElevatedButton(
-        onPressed: () {
-          CartManager().addToCart(
-            product: product,
-            selectedSize: sizes[selectedSizeIndex],
-            selectedColor: "Pink", // Replace with dynamic color
-            quantity: quantity,
-          );
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Product added to cart")),
-          );
-        },
-        child: Text("Add to Cart", style: TextStyle(fontSize: 16, color: Colors.white)),
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: CustomElevatedButton(
+        text: "Add to Cart",
+        onPressed: () => _addToCart(product),
       ),
     );
   }
 }
-
