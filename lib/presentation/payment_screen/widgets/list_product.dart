@@ -21,7 +21,9 @@ class ListProductItemWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             image: DecorationImage(
               image: NetworkImage(
-                'https://included-sheepdog-slowly.ngrok-free.app/${product['image']}',
+                product['image'] != null && product['image'].startsWith('http')
+                    ? product['image'] // Giữ nguyên URL đầy đủ
+                    : 'https://included-sheepdog-slowly.ngrok-free.app/${product['image']}', // Nối base URL nếu là đường dẫn tương đối
               ),
               fit: BoxFit.cover,
             ),

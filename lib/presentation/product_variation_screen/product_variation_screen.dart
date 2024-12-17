@@ -27,32 +27,36 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
   int selectedSizeIndex = 0;
   int quantity = 1;
 
-  final List<String> sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
-  final List<String> colors = ["Red", "Blue", "Green", "Yellow"];
+   List<String> sizes = [];
+   List<String> colors = [];
   final ProductService _productService = ProductService();
 
   @override
   void initState() {
     super.initState();
     _productDetail = _productService.fetchProductDetail(widget.productId);
+    _productDetail.then((product) {
+      setState(() {
+        sizes = product.sizes.split(',').map((s) => s.trim()).toList();
+        colors = product.colors.split(',').map((c) => c.trim()).toList();
+      });
+    });
   }
 
-  // Hàm lấy token từ SharedPreferences
   Future<String?> _getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('access_token');
   }
 
-  // Hàm thêm sản phẩm vào giỏ hàng
   Future<void> _addToCart(ProductModel product) async {
     final url =
         'https://included-sheepdog-slowly.ngrok-free.app/api/cart/create/';
     final payload = {
       "product": product.id,
       "quantity": quantity,
-      "size": sizes[selectedSizeIndex], // Ensure `selectedSizeIndex` is valid
+      "size": sizes[selectedSizeIndex], 
       "color":
-          colors[selectedColorIndex], // Ensure `selectedColorIndex` is valid
+          colors[selectedColorIndex], 
     };
 
     try {
@@ -137,6 +141,24 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
     );
   }
 
+  Widget _buildSizeOptions() {
+    return _buildOptionsSection(
+      title: "Available Sizes",
+      options: sizes, // Danh sách sizes từ API
+      selectedIndex: selectedSizeIndex,
+      onTap: (index) => setState(() => selectedSizeIndex = index),
+    );
+  }
+
+  Widget _buildColorOptions() {
+    return _buildOptionsSection(
+      title: "Available Colors",
+      options: colors, // Danh sách colors từ API
+      selectedIndex: selectedColorIndex,
+      onTap: (index) => setState(() => selectedColorIndex = index),
+    );
+  }
+
   Widget _buildImageSlider(ProductModel product) {
     return CarouselSlider.builder(
       itemCount: product.images.length,
@@ -178,65 +200,50 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
     );
   }
 
-  Widget _buildColorOptions() {
-    return _buildOptionsSection(
-      title: "Color Options",
-      options: colors,
-      selectedIndex: selectedColorIndex,
-      onTap: (index) => setState(() => selectedColorIndex = index),
-    );
-  }
-
-  Widget _buildSizeOptions() {
-    return _buildOptionsSection(
-      title: "Size Options",
-      options: sizes,
-      selectedIndex: selectedSizeIndex,
-      onTap: (index) => setState(() => selectedSizeIndex = index),
-    );
-  }
 
   Widget _buildOptionsSection({
-    required String title,
-    required List<String> options,
-    required int selectedIndex,
-    required void Function(int) onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        ),
-        Row(
-          children: List.generate(
-            options.length,
-            (index) => GestureDetector(
-              onTap: () => onTap(index),
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 8),
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
+  required String title,
+  required List<String> options,
+  required int selectedIndex,
+  required void Function(int) onTap,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(title,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      ),
+      Row(
+        children: List.generate(
+          options.length,
+          (index) => GestureDetector(
+            onTap: () => onTap(index),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color:
+                    selectedIndex == index ? Colors.blue : Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                options[index],
+                style: TextStyle(
                   color:
-                      selectedIndex == index ? Colors.blue : Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  options[index],
-                  style: TextStyle(
-                    color: selectedIndex == index ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      selectedIndex == index ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 
   Widget _buildQuantitySelector() {
     return Padding(
@@ -286,12 +293,7 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
               text: "Add to Cart",
               buttonStyle: CustomButtonStyles.fillGrayTL10,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CartScreen(),
-                  ),
-                );
+                _addToCart(product);
               },
             ),
           ),
@@ -307,7 +309,7 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
                 final selectedProduct = {
                   'product_name': product.name,
                   'image': (product.mainImage?.startsWith('http') ?? false)
-                      ? product.mainImage 
+                      ? product.mainImage
                       : product.mainImage != null
                           ? '$baseUrl${product.mainImage}'
                           : 'https://via.placeholder.com/150',
@@ -328,8 +330,8 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => PaymentScreen(
-                      cartItems: [selectedProduct], // Truyền sản phẩm được chọn
-                      totalAmount: totalAmount, // Tổng tiền của sản phẩm
+                      cartItems: [selectedProduct],
+                      totalAmount: totalAmount,
                     ),
                   ),
                 );
