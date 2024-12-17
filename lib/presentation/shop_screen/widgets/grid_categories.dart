@@ -35,8 +35,9 @@ class _GridCategoriesState extends State<GridCategories> {
           return Center(child: Text('Không có danh mục nào'));
         } else {
           // Lọc chỉ các danh mục không có danh mục con
-          List<Category> categoriesWithoutSub = snapshot.data!
-              .where((category) => category.subcategoryCount == 0)
+          List<Category> categoriesWithoutParent = snapshot.data!
+              .where((category) => category.parent == null) // Lọc chỉ các category cha (parent == null)
+              .take(6) // Giới hạn danh sách tối đa 6 category
               .toList();
 
           return Container(
@@ -85,7 +86,7 @@ class _GridCategoriesState extends State<GridCategories> {
                 GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: categoriesWithoutSub.length,
+                  itemCount: categoriesWithoutParent.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 4.h,
@@ -93,7 +94,7 @@ class _GridCategoriesState extends State<GridCategories> {
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (context, index) {
-                    final category = categoriesWithoutSub[index];
+                    final category = categoriesWithoutParent[index];
                     return CategoryItemWidget(category: category);
                   },
                 ),
