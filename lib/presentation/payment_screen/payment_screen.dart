@@ -42,12 +42,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   // Product List
   List<dynamic> _cartItems = [];
+  double _totalAmount = 0.0; 
 
   @override
-  void initState() {
-    super.initState();
-    _fetchCartItems();
-  }
+void initState() {
+  super.initState();
+  _cartItems = widget.cartItems; // Chỉ dùng cartItems truyền vào
+  _totalAmount = _calculateTotal(_cartItems); // Tính tổng từ cartItems
+}
+
 
   Future<void> _fetchCartItems() async {
     final url = Uri.parse(
@@ -75,6 +78,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     } catch (e) {
       print("Error fetching cart items: $e");
     }
+    if (_cartItems.isNotEmpty) return;
   }
 
   @override

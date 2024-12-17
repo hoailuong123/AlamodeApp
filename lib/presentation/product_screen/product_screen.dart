@@ -228,7 +228,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        CartScreen(),
+                        ProductVariationScreen(productId: product.id,),
                   ),
                 );
               },
@@ -239,33 +239,13 @@ class _ProductScreenState extends State<ProductScreen> {
             child: CustomElevatedButton(
               text: "Buy Now",
               buttonStyle: CustomButtonStyles.fillPrimary,
-              onPressed: () {
-                final selectedProduct = {
-                  'product_name': product.name,
-                  'image': product.mainImage,
-                  'price': product.price,
-                  'quantity': 1, // Mặc định số lượng là 1
-                  'size': product.sizes ?? "M", // Kích thước mặc định
-                  'color': product.colors ?? "Red", // Màu mặc định
-                };
-
-                // Tính tổng tiền cho sản phẩm
-                final totalAmount = (selectedProduct['price'] as num? ?? 0) *
-                    (selectedProduct['quantity'] as num? ?? 1);
-
-                // Chuyển sang PaymentScreen với sản phẩm được chọn và tổng tiền
+              onPressed: (){
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PaymentScreen(
-                      cartItems: [
-                        selectedProduct
-                      ], // Chuyển danh sách có 1 sản phẩm
-                      totalAmount: totalAmount.toDouble(), // Tổng tiền của sản phẩm
-                    ),
-                  ),
-                );
+                    builder: (context) => ProductVariationScreen(productId: product.id)));
               },
+              
             ),
           ),
         ],
