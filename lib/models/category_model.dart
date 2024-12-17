@@ -31,7 +31,9 @@ class Category {
     return Category(
       id: json['id'],
       name: json['name'],
-      parent: json['parent'],
+      parent: json['parent'] != null
+          ? json['parent'] as int
+          : null, 
       slug: json['slug'],
       description: json['description'],
       image: json['image'],

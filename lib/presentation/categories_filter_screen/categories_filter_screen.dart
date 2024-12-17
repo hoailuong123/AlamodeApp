@@ -1,3 +1,4 @@
+import 'package:alamodeapp/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import '../../services/category_service.dart';
 import '../../models/category_model.dart';
@@ -35,9 +36,15 @@ class _CategoriesFilterScreenState extends State<CategoriesFilterScreen> {
     Map<int, List<Category>> map = {};
     for (var category in categories) {
       if (category.parent == null) {
-        map[category.id] = [];
+        if (!map.containsKey(category.id)) {
+          map[category.id] = [];
+        }
       } else {
-        map[category.parent]?.add(category);
+        if (!map.containsKey(category.parent)) {
+          // Handle case where parent does not exist
+          map[category.parent!] = [];
+        }
+        map[category.parent!]!.add(category);
       }
     }
     setState(() {
@@ -90,13 +97,46 @@ class _CategoriesFilterScreenState extends State<CategoriesFilterScreen> {
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       children: subCategories.isNotEmpty
-          ? subCategories
-          .map((subCat) => ListTile(
-        leading: Icon(Icons.arrow_right, color: Colors.blue),
-        title: Text(subCat.name),
-      ))
-          .toList()
-          : [Text("No Subcategories")],
+          ? [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  childAspectRatio: 3.5,
+                  children: subCategories
+                      .map((subCat) => GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.subCategoryProductsScreen, // Updated route
+                                arguments: subCat,
+                              );
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: Color(0xFFFFEBEB),
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              child: Center(
+                                child: Text(subCat.name),
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+            ]
+          : [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("No Subcategories"),
+              )
+            ],
     );
   }
 }
