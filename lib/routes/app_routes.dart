@@ -76,7 +76,7 @@ class AppRoutes {
     productVariationScreen: (context) => ProductVariationScreen(productId: 3,),
     // reviewsScreen: (context) => ReviewsScreen(),
     // recentlyViewedScreen: (context) => RecentlyViewedScreen(),
-    // cartPage: (context) => CartPage(),
+    cartPage: (context) => CartScreen(),
     // cartEmptyShownFromWishlistScreen: (context) => CartEmptyShownFromWishlistScreen(),
     // toReceiveScreen: (context) => ToReceiveScreen(),
     // myActivityScreen: (context) => MyActivityScreen(),
