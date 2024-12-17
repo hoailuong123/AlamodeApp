@@ -1,3 +1,5 @@
+import 'package:alamodeapp/core/app_export.dart';
+import 'package:alamodeapp/presentation/payment_screen/payment_screen.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,11 +8,14 @@ import 'dart:convert';
 import '/services/product_service.dart';
 import '/models/product_model.dart';
 import '/widgets/custom_elevated_button.dart';
+import '/presentation/cart_page/cart_page.dart';
+import '/services/product_service.dart';
 
 class ProductVariationScreen extends StatefulWidget {
   final int productId;
 
-  const ProductVariationScreen({Key? key, required this.productId}) : super(key: key);
+  const ProductVariationScreen({Key? key, required this.productId})
+      : super(key: key);
 
   @override
   State<ProductVariationScreen> createState() => _ProductVariationScreenState();
@@ -40,20 +45,23 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
 
   // Hàm thêm sản phẩm vào giỏ hàng
   Future<void> _addToCart(ProductModel product) async {
-    final url = 'https://included-sheepdog-slowly.ngrok-free.app/api/cart/create/';
+    final url =
+        'https://included-sheepdog-slowly.ngrok-free.app/api/cart/create/';
     final payload = {
       "product": product.id,
       "quantity": quantity,
-      "size": sizes[selectedSizeIndex],
-      "color": colors[selectedColorIndex],
+      "size": sizes[selectedSizeIndex], // Ensure `selectedSizeIndex` is valid
+      "color":
+          colors[selectedColorIndex], // Ensure `selectedColorIndex` is valid
     };
 
     try {
-      final token = await _getAccessToken(); // Lấy token từ SharedPreferences
+      final token = await _getAccessToken(); // Get token from SharedPreferences
 
       if (token == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User is not authenticated. Please login again.')),
+          SnackBar(
+              content: Text('User is not authenticated. Please login again.')),
         );
         return;
       }
@@ -62,7 +70,7 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token', // Thêm Bearer Auth vào header
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode(payload),
       );
@@ -70,6 +78,11 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
       if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Product added to cart successfully!')),
+        );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CartScreen()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -145,7 +158,8 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
         children: [
           Text(
             "\$${product.salePrice ?? product.price}",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
+            style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
           ),
           if (product.salePrice != null)
             Text(
@@ -157,7 +171,8 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
               ),
             ),
           SizedBox(height: 8),
-          Text(product.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(product.name,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -192,18 +207,20 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
       children: [
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text(title,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
         Row(
           children: List.generate(
             options.length,
-                (index) => GestureDetector(
+            (index) => GestureDetector(
               onTap: () => onTap(index),
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 8),
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: selectedIndex == index ? Colors.blue : Colors.grey[200],
+                  color:
+                      selectedIndex == index ? Colors.blue : Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -227,7 +244,8 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Quantity", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text("Quantity",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           Row(
             children: [
               IconButton(
@@ -250,11 +268,75 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
 
   Widget _buildBottomBar(ProductModel product) {
     return Container(
-      height: 60,
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: CustomElevatedButton(
-        text: "Add to Cart",
-        onPressed: () => _addToCart(product),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            blurRadius: 4,
+            offset: Offset(0, -1),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: CustomElevatedButton(
+              text: "Add to Cart",
+              buttonStyle: CustomButtonStyles.fillGrayTL10,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CartScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(width: 8),
+          Expanded(
+            child: CustomElevatedButton(
+              text: "Buy Now",
+              buttonStyle: CustomButtonStyles.fillPrimary,
+              onPressed: () {
+                final String baseUrl =
+                    'https://included-sheepdog-slowly.ngrok-free.app/';
+
+                final selectedProduct = {
+                  'product_name': product.name,
+                  'image': (product.mainImage?.startsWith('http') ?? false)
+                      ? product.mainImage 
+                      : product.mainImage != null
+                          ? '$baseUrl${product.mainImage}'
+                          : 'https://via.placeholder.com/150',
+                  'price': double.tryParse(product.price.toString()) ?? 0.0,
+                  'quantity': 1,
+                  'size': product.sizes ?? "M",
+                  'color': product.colors ?? "Red",
+                };
+
+                final price = selectedProduct['price'] as double;
+                final quantity = selectedProduct['quantity'] as int;
+                final totalAmount = price * quantity;
+
+                print("Selected Product: $selectedProduct");
+                print("Total Amount: $totalAmount");
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentScreen(
+                      cartItems: [selectedProduct], // Truyền sản phẩm được chọn
+                      totalAmount: totalAmount, // Tổng tiền của sản phẩm
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

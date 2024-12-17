@@ -1,82 +1,61 @@
-import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
+import '../../../theme/custom_text_style.dart';
 import '../../../core/app_export.dart';
-import '../../../widgets/custom_icon_button.dart';
 
-class ListplayOne2ItemWidget extends StatelessWidget {
-  const ListplayOne2ItemWidget({Key? key})
-      : super(
-          key: key,
-        );
+class ListProductItemWidget extends StatelessWidget {
+  final Map<String, dynamic> product;
+
+  const ListProductItemWidget({Key? key, required this.product})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          height: 60.h,
-          width: 66.h,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CustomIconButton(
-                height: 60.h,
-                width: 60.h,
-                padding: EdgeInsets.all(4.h),
-                decoration: IconButtonStyleHelper.none,
-                child: CustomImageView(
-                  imagePath: ImageConstant.imgProduct3,
-                ),
+        // Ảnh sản phẩm
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            image: DecorationImage(
+              image: NetworkImage(
+                'https://included-sheepdog-slowly.ngrok-free.app/${product['image']}',
               ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  width: 24.h,
-                  height: 22.h,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 8.h),
-                  decoration: BoxDecoration(
-                    color: appTheme.indigo50,
-                    borderRadius: BorderRadiusStyle.roundedBorder10,
-                    border: Border.all(
-                      color: theme.colorScheme.onErrorContainer,
-                      width: 2.h,
-                      strokeAlign: BorderSide.strokeAlignOutside,
-                    ),
-                  ),
-                  child: Text(
-                    "1",
-                    textAlign: TextAlign.center,
-                    style: CustomTextStyles.labelLargeBlack900Bold,
-                  ),
-                ),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        SizedBox(width: 12),
+        // Thông tin sản phẩm
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                product['product_name'] ?? "Product Name",
+                style: CustomTextStyles.titleMediumBlack900,
+              ),
+              Text(
+                "Size: ${product['size']}, Color: ${product['color']}",
+                style: TextStyle(color: Colors.grey),
               ),
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Container(
-            width: 142.h,
-            margin: EdgeInsets.only(
-              left: 8.h,
-              top: 12.h,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              "\$${((product['price'] ?? 0) * (product['quantity'] ?? 1)).toStringAsFixed(2)}",
+              style: CustomTextStyles.titleMediumBlack900,
             ),
-            child: Text(
-              "Lorem ipsum dolor sit amet consectetur.",
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodySmall!.copyWith(
-                height: 1.33,
-              ),
+            Text(
+              "x${product['quantity'] ?? 1}", // Số lượng mặc định là 1 nếu null
+              style: TextStyle(color: Colors.grey),
             ),
-          ),
-        ),
-        Spacer(),
-        Text(
-          "\$17,00",
-          style: CustomTextStyles.titleMediumBlack900,
+          ],
         ),
       ],
     );

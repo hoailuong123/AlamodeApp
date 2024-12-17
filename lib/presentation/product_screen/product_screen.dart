@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:alamodeapp/presentation/payment_screen/payment_screen.dart';
 import 'package:alamodeapp/presentation/product_variation_screen/product_variation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
@@ -11,6 +12,7 @@ import '../../theme/custom_button_style.dart';
 import '/presentation/cart_page/widgets/cart_manager.dart';
 import '/presentation/cart_page/cart_page.dart';
 import '/presentation/product_variation_screen/product_variation_screen.dart';
+import '/presentation/payment_screen/payment_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   final int productid; // Required product ID
@@ -39,7 +41,7 @@ class _ProductScreenState extends State<ProductScreen> {
           title: Text("Product Details"),
         ),
         body: FutureBuilder<ProductModel>(
-          future: _productDetailFuture, 
+          future: _productDetailFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -218,29 +220,32 @@ class _ProductScreenState extends State<ProductScreen> {
       child: Row(
         children: [
           Expanded(
-  child: CustomElevatedButton(
-    text: "Add to Cart",
-    buttonStyle: CustomButtonStyles.fillGrayTL10,
-    onPressed: () {
-      // Navigate to Product Variation Screen with productId
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProductVariationScreen(productId: product.id),
-        ),
-      );
-    },
-  ),
-),
-
+            child: CustomElevatedButton(
+              text: "Add to Cart",
+              buttonStyle: CustomButtonStyles.fillGrayTL10,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProductVariationScreen(productId: product.id,),
+                  ),
+                );
+              },
+            ),
+          ),
           SizedBox(width: 8),
           Expanded(
             child: CustomElevatedButton(
               text: "Buy Now",
               buttonStyle: CustomButtonStyles.fillPrimary,
-              onPressed: () {
-                // Handle Buy Now logic
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductVariationScreen(productId: product.id)));
               },
+              
             ),
           ),
         ],

@@ -9,6 +9,7 @@ import '../presentation/app_navigation_screen/app_navigation_screen.dart';
 import '../presentation/categories_filter_screen/categories_filter_screen.dart';
 import '../presentation/login_screen/login_screen.dart';
 import '../presentation/create_account_screen/create_account_screen.dart';
+import '../presentation/order_list/order_list.dart';
 import '../presentation/start_screen/start_screen.dart';
 import '../presentation/shipping_address_screen/shipping_address_screen.dart';
 import '../presentation/settings_profile_screen/settings_profile_screen.dart';
@@ -48,6 +49,8 @@ class AppRoutes {
   static const String productScreen = '/product_screen';
   static const String productVariationScreen = '/product_variation_screen';
   static const String paymentScreen = '/payment_screen';
+  static const String orderListScreen = '/order_list_screen';
+
   static const String subCategoryProductsScreen = '/subcat_products_screen';
   static const String initialRoute = '/initialRoute';
 
@@ -72,7 +75,7 @@ class AppRoutes {
     productVariationScreen: (context) => ProductVariationScreen(productId: 3,),
     // reviewsScreen: (context) => ReviewsScreen(),
     // recentlyViewedScreen: (context) => RecentlyViewedScreen(),
-    // cartPage: (context) => CartPage(),
+    cartPage: (context) => CartScreen(),
     // cartEmptyShownFromWishlistScreen: (context) => CartEmptyShownFromWishlistScreen(),
     // toReceiveScreen: (context) => ToReceiveScreen(),
     // myActivityScreen: (context) => MyActivityScreen(),
@@ -85,7 +88,8 @@ class AppRoutes {
     // paymentMethodsHistoryScreen: (context) => PaymentMethodsHistoryScreen(),
     shippingAddressScreen: (context) => ShippingAddressScreen(),
     appNavigationScreen: (context) => AppNavigationScreen(),
-    paymentScreen: (context) => PaymentScreen(),
+    paymentScreen: (context) => PaymentScreen(cartItems: [],totalAmount: double.infinity,),
+
     initialRoute: (context) => AppNavigationScreen(),
   };
 }
