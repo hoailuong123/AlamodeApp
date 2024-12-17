@@ -15,7 +15,7 @@ class OneItemWidget extends StatelessWidget {
       padding: EdgeInsets.all(4.h),
       decoration: IconButtonStyleHelper.none,
       child: CustomImageView(
-        imagePath: ImageConstant.img,
+        imagePath: ImageConstant.imgProduct3,
       ),
     );
   }

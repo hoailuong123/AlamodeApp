@@ -31,7 +31,6 @@ class _CategoriesFilterScreenState extends State<CategoriesFilterScreen> {
     }
   }
 
-  /// Xử lý dữ liệu danh mục thành map để dễ hiển thị
   void _processCategories(List<Category> categories) {
     Map<int, List<Category>> map = {};
     for (var category in categories) {

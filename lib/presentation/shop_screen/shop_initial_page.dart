@@ -1,5 +1,6 @@
 // lib/presentation/shop_screen/shop_initial_page.dart
 
+import 'package:alamodeapp/services/product_service.dart';
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
@@ -16,7 +17,9 @@ import 'widgets/grid_sale_item.dart';
 import 'widgets/most_popular.dart';
 import 'widgets/one_item.dart';
 import 'widgets/recommend_item.dart';
-import 'widgets/slider_item.dart'; // Đảm bảo rằng bạn đã tạo các widget này
+import 'widgets/slider_item.dart'; 
+import '/services/category_service.dart'; 
+import '/models/product_model.dart'; 
 
 class ShopInitialPage extends StatefulWidget {
   const ShopInitialPage({Key? key}) : super(key: key);
@@ -26,10 +29,19 @@ class ShopInitialPage extends StatefulWidget {
 }
 
 class ShopInitialPageState extends State<ShopInitialPage> {
+
   TextEditingController searchController = TextEditingController();
-  int sliderIndex = 0; // Thay đổi từ 1 thành 0 vì index bắt đầu từ 0
+  int sliderIndex = 0; 
+  final ProductService _productService = ProductService();
+  late Future<ProductListResponse> _recommendedProductsFuture;
 
   @override
+
+  void initState() {
+    super.initState();
+    // _recommendedProductsFuture = _productService.fetchProducts(pageSize: 10, page: 1);
+  }
+
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
@@ -429,43 +441,61 @@ class ShopInitialPageState extends State<ShopInitialPage> {
               style: theme.textTheme.titleLarge,
             ),
           ),
-          CustomImageView(
-            imagePath: ImageConstant.img,
-            height: 12.h,
-            width: 14.h,
-            margin: EdgeInsets.only(
-              left: 6.h,
-              top: 4.h,
-            ),
-          ),
+          
         ],
       ),
     );
   }
 
-  /// Section Widget
-  Widget _buildRecommendedProductsGrid(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.h),
-      child: ResponsiveGridListBuilder(
-        minItemWidth: 1,
-        minItemsPerRow: 2,
-        maxItemsPerRow: 2,
-        horizontalGridSpacing: 4.h,
-        verticalGridSpacing: 4.h,
-        builder: (context, items) => ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          physics: NeverScrollableScrollPhysics(),
-          children: items,
-        ),
-        gridItems: List.generate(
-          6, // Cập nhật số lượng sản phẩm được đề xuất nếu cần
-              (index) {
-            return RecommendItemWidget(); // Sử dụng widget RecommendItemWidget đã tạo
-          },
-        ),
-      ),
-    );
-  }
+  /// Section Widget: Recommended Products Grid
+Widget _buildRecommendedProductsGrid(BuildContext context) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 20.h),
+    child: FutureBuilder<List<ProductModel>>(
+      future: _productService.fetchProducts(pageSize: 10, page: 1),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator()); // Loading state
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              "Failed to load products.",
+              style: TextStyle(color: Colors.red, fontSize: 16),
+            ),
+          ); // Error state
+        } else if (snapshot.hasData) {
+          final products = snapshot.data!;
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6, // Limit height
+            child: GridView.builder(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true, 
+              physics: BouncingScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Two columns
+                mainAxisSpacing: 12.0, // Spacing between rows
+                crossAxisSpacing: 12.0, // Spacing between columns
+                childAspectRatio: 0.8, // Adjust child size
+              ),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return RecommendItemWidget(
+                  productName: product.name,
+                  productPrice: product.price.toString(),
+                  productImage: product.mainImage.toString() 
+                );
+              },
+            ),
+          );
+        }
+        return SizedBox.shrink(); 
+      },
+    ),
+  );
+}
+
+
+
+
 }
