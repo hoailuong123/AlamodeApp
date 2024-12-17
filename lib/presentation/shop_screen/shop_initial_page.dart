@@ -89,8 +89,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
   /// Common widget
   Widget _buildMostPopularSection(
       BuildContext context, {
-        required String titleText,
-        required String seeAllText,
+        required String titleText
       }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -108,12 +107,12 @@ class ShopInitialPageState extends State<ShopInitialPage> {
         Spacer(),
         Padding(
           padding: EdgeInsets.only(top: 6.h),
-          child: Text(
-            seeAllText,
-            style: CustomTextStyles.titleSmall15.copyWith(
-              color: appTheme.gray900,
-            ),
-          ),
+          // child: Text(
+          //   seeAllText,
+          //   style: CustomTextStyles.titleSmall15.copyWith(
+          //     color: appTheme.gray900,
+          //   ),
+          // ),
         ),
         Padding(
           padding: EdgeInsets.only(
@@ -126,11 +125,10 @@ class ShopInitialPageState extends State<ShopInitialPage> {
             padding: EdgeInsets.all(6.h),
             decoration: IconButtonStyleHelper.fillPrimary,
             alignment: Alignment.center,
-            child: CustomImageView(
-              imagePath: ImageConstant.imgArrow,
-            ),
+            // child: CustomImageView(
+            //   imagePath: ImageConstant.imgArrow,
+            // ),
             // onTap: () { 
-            //   // Thêm hành vi khi nhấn nút, ví dụ điều hướng đến trang "See All Products"
             //   Navigator.pushNamed(context, AppRoutes.seeAllProductsPage);
             // },
           ),
@@ -271,47 +269,67 @@ class ShopInitialPageState extends State<ShopInitialPage> {
   );
 }
 
-  /// Section Widget
-  Widget _buildNewItemsSection(BuildContext context) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.maxFinite,
-                margin: EdgeInsets.only(right: 8.h),
-                child: _buildMostPopularSection(
-                  context,
-                  titleText: "New Items",
-                  seeAllText: "See All",
-                ),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Container(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    spacing: 6.h,
-                    children: List.generate(4, (index) {
-                      return GridNewItemWidget();
-                    }),
-                  ),
-                ),
-              )
-            ],
+  /// Section Widget: New Items
+Widget _buildNewItemsSection(BuildContext context) {
+  return FutureBuilder<List<ProductModel>>(
+    future: _productService.fetchNearestProducts(limit: 5), 
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(
+          child: Text(
+            "Failed to load new items.",
+            style: TextStyle(color: Colors.red, fontSize: 16),
           ),
-        ),
-      ),
-    );
-  }
+        );
+      } else if (snapshot.hasData) {
+        final products = snapshot.data!;
+
+        return SizedBox(
+          width: double.maxFinite,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.maxFinite,
+                    margin: EdgeInsets.only(right: 8.h),
+                    child: _buildMostPopularSection(
+                      context,
+                      titleText: "New Items",
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: products.map((product) {
+                        return Padding(
+                          padding: EdgeInsets.only(right: 8.h),
+                          child: GridNewItemWidget(
+                            imageUrl: product.mainImage.toString(),
+                            productName: product.name,
+                            productPrice: product.price.toString(),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+      return SizedBox(); 
+    },
+  );
+}
+
 
   /// Section Widget
   Widget _buildFlashSaleSection(BuildContext context) {
@@ -422,8 +440,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                 margin: EdgeInsets.only(right: 8.h),
                 child: _buildMostPopularSection(
                   context,
-                  titleText: "Most Popular",
-                  seeAllText: "See All",
+                  titleText: "Most Popular"
                 ),
               ),
               SizedBox(height: 8.h),
@@ -463,8 +480,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
               "Just For You",
               style: theme.textTheme.titleLarge,
             ),
-          ),
-          
+          )
         ],
       ),
     );

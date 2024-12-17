@@ -20,7 +20,7 @@ class OneItemWidget extends StatelessWidget {
       width: 60.h,
       padding: EdgeInsets.all(4.h),
       decoration: IconButtonStyleHelper.none,
-      onTap: onTap, // Thay 'onPressed' bằng 'onTap'
+      onTap: onTap, 
       child: Image.network(
         product.mainImage ?? 'assets/images/placeholder.png', 
         fit: BoxFit.cover,
