@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../../core/app_export.dart';
 import '../../../widgets/custom_icon_button.dart';
+import '/models/product_model.dart'; 
 
 class OneItemWidget extends StatelessWidget {
-  const OneItemWidget({Key? key})
-      : super(
-          key: key,
-        );
+  final ProductModel product; 
+  final VoidCallback onTap; 
+
+  const OneItemWidget({
+    Key? key,
+    required this.product,
+    required this.onTap,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CustomIconButton(
@@ -14,8 +20,17 @@ class OneItemWidget extends StatelessWidget {
       width: 60.h,
       padding: EdgeInsets.all(4.h),
       decoration: IconButtonStyleHelper.none,
-      child: CustomImageView(
-        imagePath: ImageConstant.imgProduct3,
+      onTap: onTap, // Thay 'onPressed' bằng 'onTap'
+      child: Image.network(
+        product.mainImage ?? 'assets/images/placeholder.png', 
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            'assets/images/placeholder.png',
+            fit: BoxFit.cover,
+            width: double.infinity,
+          );
+        },
       ),
     );
   }
