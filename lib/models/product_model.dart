@@ -71,7 +71,7 @@ class ProductModel {
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     var imagesFromJson = json['images'] as List;
     List<ImageModel> imageList =
-    imagesFromJson.map((i) => ImageModel.fromJson(i)).toList();
+        imagesFromJson.map((i) => ImageModel.fromJson(i)).toList();
 
     String extractedMainImage = '';
     if (json['images'] != null && json['images'] is List) {
@@ -82,10 +82,17 @@ class ProductModel {
       );
       extractedMainImage = mainImage != null ? mainImage['image'] : '';
     }
+    String calculateDiscount(String originalPrice, String salePrice) {
+      double original = double.parse(originalPrice);
+      double sale = double.parse(salePrice);
+      double discount = ((original - sale) / original) * 100;
+      return discount.toStringAsFixed(0);
+    }
 
     var stockVariantsFromJson = json['stock_variants'] as List;
-    List<StockVariantModel> stockVariantList =
-    stockVariantsFromJson.map((sv) => StockVariantModel.fromJson(sv)).toList();
+    List<StockVariantModel> stockVariantList = stockVariantsFromJson
+        .map((sv) => StockVariantModel.fromJson(sv))
+        .toList();
 
     return ProductModel(
       id: json['id'],
@@ -142,7 +149,7 @@ class ProductListResponse {
   factory ProductListResponse.fromJson(Map<String, dynamic> json) {
     var resultsFromJson = json['results'] as List;
     List<ProductModel> productList =
-    resultsFromJson.map((p) => ProductModel.fromJson(p)).toList();
+        resultsFromJson.map((p) => ProductModel.fromJson(p)).toList();
 
     return ProductListResponse(
       count: json['count'],
