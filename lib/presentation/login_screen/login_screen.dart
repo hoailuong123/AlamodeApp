@@ -1,17 +1,55 @@
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import '/core/app_export.dart';
 import '../../widgets/custom_elevated_button.dart';
 
-// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future<void> _login(BuildContext context) async {
+    final username = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (_formKey.currentState!.validate()) {
+      try {
+        final response = await http.post(
+          Uri.parse('https://sterling-notably-monster.ngrok-free.app/api/login'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'username': username, 'password': password}),
+        );
+
+        if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+
+          // Lưu thông tin user vào local storage
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('access_token', responseData['access']);
+          await prefs.setString('refresh_token', responseData['refresh']);
+          await prefs.setString('username', responseData['username']);
+          await prefs.setString('email', responseData['email']);
+          await prefs.setString('role', responseData['role']);
+
+          // Chuyển tới màn hình chính
+          Navigator.pushNamed(context, AppRoutes.shopScreen);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Login failed: Invalid credentials!')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,41 +170,7 @@ class LoginScreen extends StatelessWidget {
             text: "Next",
             buttonStyle: CustomButtonStyles.fillPrimary,
             buttonTextStyle: CustomTextStyles.titleLargeNunitoSansGray10001,
-            onPressed: () async {
-              final email = emailController.text;
-              final password = passwordController.text;
-
-              if (_formKey.currentState!.validate()) {
-                final response = await http.post(
-                  Uri.parse('http://127.0.0.1:8000/api/login/'),
-                  headers: <String, String>{
-                    'Content-Type': 'application/json; charset=UTF-8',
-                  },
-                  body: jsonEncode(<String, String>{
-                    'username': email,
-                    'password': password,
-                  }),
-                );
-
-                if (response.statusCode == 200) {
-                  final responseData = jsonDecode(response.body);
-                  if (responseData['role'] != null) {
-                    // Handle successful login
-                    Navigator.pushNamed(context, AppRoutes.shopScreen);
-                  } else {
-                    // Handle login error
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Username or password is incorrect')),
-                    );
-                  }
-                } else {
-                  // Handle login error
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Login failed')),
-                  );
-                }
-              }
-            },
+            onPressed: () => _login(context),
           ),
           SizedBox(height: 14.h),
           CustomElevatedButton(
@@ -175,7 +179,7 @@ class LoginScreen extends StatelessWidget {
             buttonStyle: CustomButtonStyles.fillGray,
             buttonTextStyle: CustomTextStyles.titleMediumIndigo200,
             onPressed: () => {
-               Navigator.pushNamed(context, AppRoutes.startScreen)
+              Navigator.pushNamed(context, AppRoutes.startScreen)
             },
           )
         ],
