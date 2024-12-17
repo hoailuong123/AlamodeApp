@@ -44,7 +44,6 @@ class ListProductItemWidget extends StatelessWidget {
             ],
           ),
         ),
-        // Giá và số lượng
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
