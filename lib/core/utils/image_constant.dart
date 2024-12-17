@@ -34,6 +34,7 @@ class ImageConstant {
   static String imgFrame = '$imagePath/icon_frame.png';
   static String imgCardvisa = '$imagePath/Visa.png';
   static String imgCardmaster= '$imagePath/Mastercard.png';
+  static String imgSlider= '$imagePath/slider1.png';
 
 
 
