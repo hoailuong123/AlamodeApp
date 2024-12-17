@@ -3,8 +3,9 @@ import 'package:http/http.dart' as http;
 import '../models/product_model.dart';
 
 class ProductService {
-  final String baseUrl = "http://sterling-notably-monster.ngrok-free.app";
-
+  // final String baseUrl = "http://sterling-notably-monster.ngrok-free.app";
+  final String baseUrl = 'http://10.0.172.224:8000';
+  
   Future<List<ProductModel>> fetchProducts({int pageSize = 10, int page = 1}) async {
     final url = Uri.parse('$baseUrl/api/product/list/?page_size=$pageSize&page=$page');
     final response = await http.get(url);

@@ -129,6 +129,10 @@ class ShopInitialPageState extends State<ShopInitialPage> {
             child: CustomImageView(
               imagePath: ImageConstant.imgArrow,
             ),
+            // onTap: () { 
+            //   // Thêm hành vi khi nhấn nút, ví dụ điều hướng đến trang "See All Products"
+            //   Navigator.pushNamed(context, AppRoutes.seeAllProductsPage);
+            // },
           ),
         )
       ],
@@ -216,37 +220,56 @@ class ShopInitialPageState extends State<ShopInitialPage> {
 
   /// Section Widget
   Widget _buildTopProductsSection(BuildContext context) {
-    return Container(
-      width: double.maxFinite,
-      margin: EdgeInsets.symmetric(horizontal: 20.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Top Products",
-            style: theme.textTheme.titleLarge,
-          ),
-          SizedBox(height: 8.h),
-          Container(
-            width: double.maxFinite,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Wrap(
-                direction: Axis.horizontal,
-                spacing: 8.h,
-                children: List.generate(
-                  5, // Cập nhật số lượng sản phẩm nếu cần
-                      (index) {
-                    return OneItemWidget();
-                  },
+  return FutureBuilder<List<ProductModel>>(
+    future: _productService.fetchProducts(pageSize: 5, page: 1), 
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.hasError) {
+        return Center(child: Text("Failed to load top products."));
+      } else if (snapshot.hasData) {
+        final topProducts = snapshot.data!;
+        return Container(
+          width: double.maxFinite,
+          margin: EdgeInsets.symmetric(horizontal: 20.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Top Products",
+                style: theme.textTheme.titleLarge,
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                width: double.maxFinite,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    direction: Axis.horizontal,
+                    spacing: 8.h,
+                    children: topProducts.map((product) {
+                      return OneItemWidget(
+                        product: product, 
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.productScreen, 
+                            arguments: product, 
+                          );
+                        },
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        );
+      }
+      return SizedBox.shrink();
+    },
+  );
+}
 
   /// Section Widget
   Widget _buildNewItemsSection(BuildContext context) {
