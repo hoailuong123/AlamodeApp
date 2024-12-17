@@ -12,8 +12,11 @@ import '../../../core/app_export.dart';
 import 'widgets/list_product.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({Key? key, required this.cartItems,
-    required this.totalAmount,}) : super(key: key);
+  const PaymentScreen({
+    Key? key,
+    required this.cartItems,
+    required this.totalAmount,
+  }) : super(key: key);
   final List<dynamic> cartItems; // Danh sách sản phẩm
   final double totalAmount; // Tổng tiền
 
@@ -225,13 +228,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _buildTotalSection() {
+    double total = _calculateTotal(_cartItems);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text("Total", style: CustomTextStyles.titleMediumBlack900),
-        Text("\$34,00", style: CustomTextStyles.titleMediumBlack900),
+        Text("\$${total.toStringAsFixed(2)}", // Tổng tiền
+            style: CustomTextStyles.titleMediumBlack900),
       ],
     );
+  }
+
+  double _calculateTotal(List<dynamic> cartItems) {
+    return cartItems.fold(0.0, (sum, product) {
+      final price = (product['price'] as num?) ?? 0.0;
+      final quantity = (product['quantity'] as int?) ?? 1;
+      return sum + (price * quantity);
+    });
   }
 
   Widget _buildPayButton() {

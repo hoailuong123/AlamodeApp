@@ -49,11 +49,11 @@ class ListProductItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              "\$${(product['price'] * product['quantity']).toStringAsFixed(2)}",
+              "\$${((product['price'] ?? 0) * (product['quantity'] ?? 1)).toStringAsFixed(2)}",
               style: CustomTextStyles.titleMediumBlack900,
             ),
             Text(
-              "x${product['quantity']}",
+              "x${product['quantity'] ?? 1}", // Số lượng mặc định là 1 nếu null
               style: TextStyle(color: Colors.grey),
             ),
           ],
