@@ -1,6 +1,7 @@
 import 'package:alamodeapp/core/app_export.dart';
 import 'package:flutter/material.dart';
 import '../../../theme/custom_text_style.dart';
+import '/presentation/order_list/order_list.dart'; // Import màn hình Order List
 
 class ReceiveProgressScreen extends StatelessWidget {
   const ReceiveProgressScreen({Key? key}) : super(key: key);
@@ -38,10 +39,12 @@ class ReceiveProgressScreen extends StatelessWidget {
             const SizedBox(height: 16),
             // Timeline
             _buildTimeline(),
+            const SizedBox(height: 30),
+
+            _buildBottomSection(context)
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
@@ -91,24 +94,13 @@ class ReceiveProgressScreen extends StatelessWidget {
           left: 0,
           child: Container(
             height: 8,
-            width: 250, 
+            width: 250,
             decoration: BoxDecoration(
               color: Colors.blue,
               borderRadius: BorderRadius.circular(8),
             ),
           ),
         ),
-        // Positioned(
-        //   left: 0,
-        //   child: CircleAvatar(
-        //     radius: 12,
-        //     backgroundColor: Colors.white,
-        //     child: CircleAvatar(
-        //       radius: 8,
-        //       backgroundColor: Colors.blue,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -160,28 +152,26 @@ class ReceiveProgressScreen extends StatelessWidget {
           title: "On the Way to Logistic Facility",
           time: "April, 19 16:20",
           description:
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.",
+              "Your parcel is on the way to our logistic facility.",
           isCompleted: true,
         ),
         _buildTimelineItem(
           title: "Arrived at Logistic Facility",
           time: "April, 19 19:07",
           description:
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.",
+              "Your parcel has arrived at our logistic facility.",
           isCompleted: true,
         ),
         _buildTimelineItem(
           title: "Shipped",
           time: "Expected on April, 20",
-          description:
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod.",
+          description: "Your parcel is on the way to its final destination.",
           isCompleted: false,
         ),
       ],
     );
   }
 
-  // Timeline Item
   Widget _buildTimelineItem({
     required String title,
     required String time,
@@ -217,13 +207,7 @@ class ReceiveProgressScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                time,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
-              ),
+              Text(time, style: TextStyle(color: Colors.grey.shade600)),
               const SizedBox(height: 4),
               Text(
                 description,
@@ -242,34 +226,32 @@ class ReceiveProgressScreen extends StatelessWidget {
     );
   }
 
-  // Bottom Navigation Bar
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      currentIndex: 0,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: "",
+  Widget _buildBottomSection(BuildContext context) {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue,
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border),
-          label: "",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.receipt),
-          label: "",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.shopping_bag_outlined),
-          label: "",
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: "",
-        ),
-      ],
-    );
-  }
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OrderListScreen()),
+          );
+        },
+        child: Text("All My Order", style: TextStyle(color: Colors.white,fontSize: 20)),
+      ),
+     // Đường phân cách
+    ],
+  );
 }
+
+}
+
+
+  
