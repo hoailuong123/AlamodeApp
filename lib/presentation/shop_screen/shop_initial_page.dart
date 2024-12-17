@@ -17,9 +17,9 @@ import 'widgets/grid_sale_item.dart';
 import 'widgets/most_popular.dart';
 import 'widgets/one_item.dart';
 import 'widgets/recommend_item.dart';
-import 'widgets/slider_item.dart'; 
-import '/services/category_service.dart'; 
-import '/models/product_model.dart'; 
+import 'widgets/slider_item.dart';
+import '/services/category_service.dart';
+import '/models/product_model.dart';
 
 class ShopInitialPage extends StatefulWidget {
   const ShopInitialPage({Key? key}) : super(key: key);
@@ -29,14 +29,12 @@ class ShopInitialPage extends StatefulWidget {
 }
 
 class ShopInitialPageState extends State<ShopInitialPage> {
-
   TextEditingController searchController = TextEditingController();
-  int sliderIndex = 0; 
+  int sliderIndex = 0;
   final ProductService _productService = ProductService();
   late Future<ProductListResponse> _recommendedProductsFuture;
 
   @override
-
   void initState() {
     super.initState();
     // _recommendedProductsFuture = _productService.fetchProducts(pageSize: 10, page: 1);
@@ -87,10 +85,8 @@ class ShopInitialPageState extends State<ShopInitialPage> {
   }
 
   /// Common widget
-  Widget _buildMostPopularSection(
-      BuildContext context, {
-        required String titleText
-      }) {
+  Widget _buildMostPopularSection(BuildContext context,
+      {required String titleText}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +231,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                 spacing: 8.h,
                 children: List.generate(
                   5, // Cập nhật số lượng sản phẩm nếu cần
-                      (index) {
+                  (index) {
                     return OneItemWidget();
                   },
                 ),
@@ -248,66 +244,66 @@ class ShopInitialPageState extends State<ShopInitialPage> {
   }
 
   /// Section Widget: New Items
-Widget _buildNewItemsSection(BuildContext context) {
-  return FutureBuilder<List<ProductModel>>(
-    future: _productService.fetchNearestProducts(limit: 5), 
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      } else if (snapshot.hasError) {
-        return Center(
-          child: Text(
-            "Failed to load new items.",
-            style: TextStyle(color: Colors.red, fontSize: 16),
-          ),
-        );
-      } else if (snapshot.hasData) {
-        final products = snapshot.data!;
+  Widget _buildNewItemsSection(BuildContext context) {
+    return FutureBuilder<List<ProductModel>>(
+      future: _productService.fetchNearestProducts(limit: 5),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              "Failed to load new items.",
+              style: TextStyle(color: Colors.red, fontSize: 16),
+            ),
+          );
+        } else if (snapshot.hasData) {
+          final products = snapshot.data!;
 
-        return SizedBox(
-          width: double.maxFinite,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 20.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.maxFinite,
-                    margin: EdgeInsets.only(right: 8.h),
-                    child: _buildMostPopularSection(
-                      context,
-                      titleText: "New Items",
+          return SizedBox(
+            width: double.maxFinite,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.only(left: 20.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.maxFinite,
+                      margin: EdgeInsets.only(right: 8.h),
+                      child: _buildMostPopularSection(
+                        context,
+                        titleText: "New Items",
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10.h),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: products.map((product) {
-                        return Padding(
-                          padding: EdgeInsets.only(right: 8.h),
-                          child: GridNewItemWidget(
-                            imageUrl: product.mainImage.toString(),
-                            productName: product.name,
-                            productPrice: product.price.toString(),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
+                    SizedBox(height: 10.h),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: products.map((product) {
+                          return Padding(
+                            padding: EdgeInsets.only(right: 8.h),
+                            child: GridNewItemWidget(
+                              imageUrl: product.mainImage.toString() ?? '',
+                              productName: product.name,
+                              productPrice: product.price.toString(),
+                              productId: product.id,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }
-      return SizedBox(); 
-    },
-  );
-}
-
+          );
+        }
+        return SizedBox();
+      },
+    );
+  }
 
   /// Section Widget
   Widget _buildFlashSaleSection(BuildContext context) {
@@ -393,7 +389,7 @@ Widget _buildNewItemsSection(BuildContext context) {
           ),
           gridItems: List.generate(
             6,
-                (index) {
+            (index) {
               return GridSaleItemWidget();
             },
           ),
@@ -416,10 +412,8 @@ Widget _buildNewItemsSection(BuildContext context) {
               Container(
                 width: double.maxFinite,
                 margin: EdgeInsets.only(right: 8.h),
-                child: _buildMostPopularSection(
-                  context,
-                  titleText: "Most Popular"
-                ),
+                child: _buildMostPopularSection(context,
+                    titleText: "Most Popular"),
               ),
               SizedBox(height: 8.h),
               Container(
@@ -430,7 +424,7 @@ Widget _buildNewItemsSection(BuildContext context) {
                     spacing: 6.h,
                     children: List.generate(
                       4,
-                          (index) {
+                      (index) {
                         return MostPopularItemWidget();
                       },
                     ),
@@ -465,54 +459,51 @@ Widget _buildNewItemsSection(BuildContext context) {
   }
 
   /// Section Widget: Recommended Products Grid
-Widget _buildRecommendedProductsGrid(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 20.h),
-    child: FutureBuilder<List<ProductModel>>(
-      future: _productService.fetchProducts(pageSize: 10, page: 1),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator()); // Loading state
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              "Failed to load products.",
-              style: TextStyle(color: Colors.red, fontSize: 16),
-            ),
-          ); // Error state
-        } else if (snapshot.hasData) {
-          final products = snapshot.data!;
-          return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.6, // Limit height
-            child: GridView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true, 
-              physics: BouncingScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Two columns
-                mainAxisSpacing: 12.0, // Spacing between rows
-                crossAxisSpacing: 12.0, // Spacing between columns
-                childAspectRatio: 0.8, // Adjust child size
+  Widget _buildRecommendedProductsGrid(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.h),
+      child: FutureBuilder<List<ProductModel>>(
+        future: _productService.fetchProducts(pageSize: 10, page: 1),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator()); // Loading state
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                "Failed to load products.",
+                style: TextStyle(color: Colors.red, fontSize: 16),
               ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return RecommendItemWidget(
-                  productName: product.name,
-                  productPrice: product.price.toString(),
-                  productImage: product.mainImage.toString() 
-                );
-              },
-            ),
-          );
-        }
-        return SizedBox.shrink(); 
-      },
-    ),
-  );
-}
-
-
-
-
+            ); // Error state
+          } else if (snapshot.hasData) {
+            final products = snapshot.data!;
+            return SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6, // Limit height
+              child: GridView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Two columns
+                  mainAxisSpacing: 12.0, // Spacing between rows
+                  crossAxisSpacing: 12.0, // Spacing between columns
+                  childAspectRatio: 0.8, // Adjust child size
+                ),
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return RecommendItemWidget(
+                    productName: product.name,
+                    productPrice: product.price.toString(),
+                    productImage: product.mainImage.toString(),
+                    productId: product.id,
+                  );
+                },
+              ),
+            );
+          }
+          return SizedBox.shrink();
+        },
+      ),
+    );
+  }
 }

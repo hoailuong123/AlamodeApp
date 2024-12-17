@@ -72,7 +72,7 @@ class AppRoutes {
     // imageSearchScreen: (context) => ImageSearchScreen(),
     // filterScreen: (context) => FilterScreen(),
     productFullScreen: (context) => ProductFullScreen(),
-    productScreen: (context) => ProductScreen(),
+    productScreen: (context) => ProductScreen(productid: 2),
     productVariationScreen: (context) => ProductVariationScreen(),
     // reviewsScreen: (context) => ReviewsScreen(),
     // recentlyViewedScreen: (context) => RecentlyViewedScreen(),
