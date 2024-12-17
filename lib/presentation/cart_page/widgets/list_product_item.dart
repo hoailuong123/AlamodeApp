@@ -69,8 +69,7 @@ class ProductListItemWidget extends StatelessWidget {
                           child: CustomImageView(
                             imagePath: ImageConstant.imgFrame,
                           ),
-                          onTap: () { // Thay 'onPressed' bằng 'onTap'
-                            // Thêm hành vi khi nhấn nút, ví dụ xóa sản phẩm khỏi giỏ hàng
+                          onTap: () { 
                           },
                         ),
                       ),
