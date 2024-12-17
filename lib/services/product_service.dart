@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/product_model.dart';
 
 class ProductService {
-  final String baseUrl = "http://sterling-notably-monster.ngrok-free.app";
+  final String baseUrl = "https://included-sheepdog-slowly.ngrok-free.app";
 
   Future<List<ProductModel>> fetchProducts(
       {int pageSize = 10, int page = 1}) async {

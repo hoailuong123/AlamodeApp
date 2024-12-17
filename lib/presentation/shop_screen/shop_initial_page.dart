@@ -21,6 +21,7 @@ import 'widgets/slider_item.dart';
 import '/services/category_service.dart';
 import '/models/product_model.dart';
 import '/presentation/product_screen/product_screen.dart';
+import '/services/product_service.dart';
 
 class ShopInitialPage extends StatefulWidget {
   const ShopInitialPage({Key? key}) : super(key: key);
@@ -33,12 +34,16 @@ class ShopInitialPageState extends State<ShopInitialPage> {
   TextEditingController searchController = TextEditingController();
   int sliderIndex = 0;
   final ProductService _productService = ProductService();
-  late Future<ProductListResponse> _recommendedProductsFuture;
+  late Future<List<ProductModel>> _recommendedProductsFuture;
+  late Future<List<ProductModel>> _newItemsFuture;
+  late Future<List<ProductModel>> _flashSaleFuture;
 
   @override
   void initState() {
     super.initState();
-    // _recommendedProductsFuture = _productService.fetchProducts(pageSize: 10, page: 1);
+     _newItemsFuture = _productService.fetchNearestProducts(limit: 5);
+    _flashSaleFuture = _productService.fetchSaleProducts(limit: 6);
+    _recommendedProductsFuture = _productService.fetchProducts(pageSize: 10, page: 1);
   }
 
   Widget build(BuildContext context) {
@@ -64,13 +69,11 @@ class ShopInitialPageState extends State<ShopInitialPage> {
                     SizedBox(height: 18.h),
                     GridCategories(),
                     // SizedBox(height: 28.h),
-                    // _buildTopProductsSection(context),
                     SizedBox(height: 48.h),
                     _buildNewItemsSection(context),
                     SizedBox(height: 24.h),
                     _buildFlashSaleSection(context),
                     SizedBox(height: 24.h),
-                    // _buildJustForYouSection(context),
                     // SizedBox(height: 26.h),
                     _buildRowtitlenine(context),
                     SizedBox(height: 10.h),
@@ -104,31 +107,22 @@ class ShopInitialPageState extends State<ShopInitialPage> {
         Spacer(),
         Padding(
           padding: EdgeInsets.only(top: 6.h),
-          // child: Text(
-          //   seeAllText,
-          //   style: CustomTextStyles.titleSmall15.copyWith(
-          //     color: appTheme.gray900,
-          //   ),
-          // ),
         ),
         Padding(
           padding: EdgeInsets.only(
             left: 12.h,
             bottom: 4.h,
           ),
-          child: CustomIconButton(
-            height: 30.h,
-            width: 30.h,
-            padding: EdgeInsets.all(6.h),
-            decoration: IconButtonStyleHelper.fillPrimary,
-            alignment: Alignment.center,
-            // child: CustomImageView(
-            //   imagePath: ImageConstant.imgArrow,
-            // ),
-            // onTap: () { 
-            //   Navigator.pushNamed(context, AppRoutes.seeAllProductsPage);
-            // },
-          ),
+          // child: CustomIconButton(
+          //   height: 30.h,
+          //   width: 30.h,
+          //   padding: EdgeInsets.all(6.h),
+          //   decoration: IconButtonStyleHelper.fillPrimary,
+          //   alignment: Alignment.center,
+          //   // child: CustomImageView(
+          //   //   imagePath: ImageConstant.imgArrow,
+          //   // ),
+          // ),
         )
       ],
     );
@@ -213,44 +207,12 @@ class ShopInitialPageState extends State<ShopInitialPage> {
     );
   }
 
-  // /// Section Widget
-  // Widget _buildTopProductsSection(BuildContext context) {
-  //   return Container(
-  //     width: double.maxFinite,
-  //     margin: EdgeInsets.symmetric(horizontal: 20.h),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text(
-  //           "Top Products",
-  //           style: theme.textTheme.titleLarge,
-  //         ),
-  //         SizedBox(height: 8.h),
-  //         Container(
-  //           width: double.maxFinite,
-  //           child: SingleChildScrollView(
-  //             scrollDirection: Axis.horizontal,
-  //             child: Wrap(
-  //               direction: Axis.horizontal,
-  //               spacing: 8.h,
-  //               children: List.generate(
-  //                 5, // Cập nhật số lượng sản phẩm nếu cần
-  //                 (index) {
-  //                   return OneItemWidget();
-  //                 },
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+
 
   /// Section Widget: New Items
   Widget _buildNewItemsSection(BuildContext context) {
     return FutureBuilder<List<ProductModel>>(
-      future: _productService.fetchNearestProducts(limit: 5),
+      future: _newItemsFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -326,7 +288,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
           ),
         ),
         FutureBuilder<List<ProductModel>>(
-          future: _productService.fetchSaleProducts(limit: 6),
+          future: _flashSaleFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -436,7 +398,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.h),
       child: FutureBuilder<List<ProductModel>>(
-        future: _productService.fetchProducts(pageSize: 10, page: 1),
+        future: _recommendedProductsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator()); // Loading state
