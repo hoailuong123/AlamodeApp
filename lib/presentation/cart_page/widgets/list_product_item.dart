@@ -69,6 +69,8 @@ class ProductListItemWidget extends StatelessWidget {
                           child: CustomImageView(
                             imagePath: ImageConstant.imgFrame,
                           ),
+                          onTap: () { 
+                          },
                         ),
                       ),
                     ],

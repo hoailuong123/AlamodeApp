@@ -35,8 +35,8 @@ class _GridCategoriesState extends State<GridCategories> {
           return Center(child: Text('Không có danh mục nào'));
         } else {
           List<Category> categoriesWithoutParent = snapshot.data!
-              .where((category) => category.parent == null) 
-              .take(6)
+              .where((category) => category.parent == null)
+              .take(6)  // giới hạn số lượng danh mục hiển thị
               .toList();
 
           return Container(
