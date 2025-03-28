@@ -15,7 +15,7 @@
 ---
 ## 1. Giới thiệu tổng quan
 
-*Toysrus là một dự án thương mại điện tử dành riêng cho đồ chơi trẻ em, giúp người dùng dễ dàng tiếp cận chương trình khuyến mãi, chiến dịch, lưu mã giảm giá, tích điểm hội viên, mua sắm và quản lý đơn hàng.*
+*Toysrus là một dự án thương mại điện tử dành riêng cho đồ chơi trẻ em, giúp người dùng dễ dàng tiếp cận chương trình khuyến mãi, chiến dịch, lưu mã giảm giá, tích điểm hội viên, mua sắm và quản lý đơn hàng..*
 
 ---
 ## 2. Chức năng chính của ứng dụng
