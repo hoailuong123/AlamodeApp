@@ -1,5 +1,6 @@
 import 'package:alamodeapp/presentation/cart_page/cart_page.dart';
 import 'package:alamodeapp/presentation/order_list/order_list.dart';
+import 'package:alamodeapp/presentation/settings_full_screen/settings_full_screen.dart';
 import 'package:alamodeapp/presentation/settings_profile_screen/settings_profile_screen.dart';
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
@@ -48,16 +49,16 @@ class ShopScreen extends StatelessWidget {
   /// Mapping routes for bottom navigation bar
   String getCurrentRoute(BottomBarEnum type) {
     switch (type) {
-      case BottomBarEnum.loremipsumdolorsitametconsectetur:
+      case BottomBarEnum.home:
         return AppRoutes.shopInitialPage;
-      case BottomBarEnum.loremipsumdolor3:
+      case BottomBarEnum.cart:
         return AppRoutes.cartPage;
       case BottomBarEnum.order:
         return AppRoutes.orderListScreen;
       case BottomBarEnum.profile:
-        return AppRoutes.fullProfilePage; // Example route
+        return AppRoutes.settingsFullScreen; 
       default:
-        return '';
+        return '/';
     }
   }
 
@@ -70,8 +71,8 @@ class ShopScreen extends StatelessWidget {
         return CartScreen();
       case AppRoutes.orderListScreen:
         return OrderListScreen();
-      case AppRoutes.fullProfilePage:
-        return SettingsProfileScreen();
+      case AppRoutes.settingsFullScreen:
+        return SettingsFullScreen();
       default:
         return Center(
           child: Text(

@@ -5,9 +5,9 @@ import '../../services/product_service.dart';
 import '../../presentation/shop_screen/widgets/recommend_item.dart';
 
 class SubCategoryProductsScreen extends StatefulWidget {
-  final String subCategoryId; // Change from Category to subCategoryId
+  final String subCategoryId; 
 
-  SubCategoryProductsScreen({required this.subCategoryId}); // Updated constructor
+  SubCategoryProductsScreen({required this.subCategoryId}); 
 
   @override
   _SubCategoryProductsScreenState createState() => _SubCategoryProductsScreenState();

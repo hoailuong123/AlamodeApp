@@ -45,9 +45,9 @@ class _CartScreenState extends State<CartScreen> {
         if (jsonData.containsKey('items')) {
           setState(() {
             _total = jsonData['items'].fold(0.0, (sum, item) {
-              final quantity =
-                  (item['quantity'] as num?) ?? 0; 
-              return sum + 1.0 * quantity; 
+              final price = (item['price'] as num?) ?? 0.0; // Get price
+              final quantity = (item['quantity'] as int?) ?? 0; // Get quantity
+              return sum + (price * quantity); // Calculate total for this item
             });
           });
           return jsonData['items'] as List<dynamic>;
@@ -59,6 +59,34 @@ class _CartScreenState extends State<CartScreen> {
       }
     } catch (e) {
       throw Exception("Error fetching cart items: $e");
+    }
+  }
+
+  Future<void> _removeFromCart(Map<String, dynamic> product) async {
+    final url = Uri.parse(
+        'https://included-sheepdog-slowly.ngrok-free.app/api/cart/items/${product['id']}/'); // Use product ID in the URL
+    final token = await _getAccessToken();
+
+    try {
+      final response = await http.delete(
+        // Change to DELETE method
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 204) {
+        // 204 No Content is standard for successful DELETE
+        print("Item successfully removed.");
+      } else {
+        print(
+            "Failed to remove item: ${response.statusCode} - ${response.body}");
+        throw Exception("Failed to remove item from cart");
+      }
+    } catch (e) {
+      print("Error removing item: $e");
     }
   }
 
@@ -90,79 +118,108 @@ class _CartScreenState extends State<CartScreen> {
     }
   }
 
-  Widget _buildCartItem(Map<String, dynamic> product, List<dynamic> cartItems) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 4,
-            spreadRadius: 1,
-            offset: Offset(0, 2),
-          ),
-        ],
+  Widget _buildCartItem(
+      Map<String, dynamic> product, List<dynamic> cartItems, int index) {
+    return Dismissible(
+      key: Key(product['id'].toString()), // Unique key for each item
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        color: Colors.red,
+        child: Icon(Icons.delete, color: Colors.white),
       ),
-      child: Row(
-        children: [
-          // Hình ảnh sản phẩm
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://included-sheepdog-slowly.ngrok-free.app/${product['image']}'),
-                fit: BoxFit.cover,
+      onDismissed: (direction) async {
+        try {
+          await _removeFromCart(product);
+          setState(() {
+            cartItems.remove(product);
+            _recalculateTotal(cartItems);
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text("${product['product_name']} removed from cart")),
+          );
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to remove item: $e")),
+          );
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 4,
+              spreadRadius: 1,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Product image
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: NetworkImage('${product['image']}'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          SizedBox(width: 12),
-          // Thông tin sản phẩm
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product['product_name'],
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Text("${product['color']}, Size ${product['size']}",
-                    style: TextStyle(color: Colors.grey)),
-                SizedBox(height: 8),
-                Text(
-                  "\$${(product['price'] as num?)?.toStringAsFixed(2) ?? '0.00'}",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-          // Nút tăng/giảm số lượng
-          Column(
-            children: [
-              Row(
+            SizedBox(width: 12),
+            // Product details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.remove_circle_outline, color: Colors.blue),
-                    onPressed: () => _decrementQuantity(product, cartItems),
-                  ),
                   Text(
-                    "${product['quantity']}",
+                    product['product_name'],
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.add_circle_outline, color: Colors.blue),
-                    onPressed: () => _incrementQuantity(product, cartItems),
+                  Text("${product['color']}, Size ${product['size']}",
+                      style: TextStyle(color: Colors.grey)),
+                  SizedBox(height: 8),
+                  Text(
+                    "\$${(product['price'] as num?)?.toStringAsFixed(2) ?? '0.00'}",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
-            ],
-          ),
-        ],
+            ),
+            // Quantity buttons
+            Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      icon:
+                          Icon(Icons.remove_circle_outline, color: Colors.blue),
+                      onPressed: () => _decrementQuantity(product, cartItems),
+                    ),
+                    Text(
+                      "${product['quantity']}",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add_circle_outline, color: Colors.blue),
+                      onPressed: () => _incrementQuantity(product, cartItems),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -191,7 +248,7 @@ class _CartScreenState extends State<CartScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => PaymentScreen(
-                    cartItems: [], // Truyền danh sách nếu cần
+                    cartItems: [], 
                     totalAmount: _total,
                   ),
                 ),
@@ -230,7 +287,7 @@ class _CartScreenState extends State<CartScreen> {
                   return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-                      return _buildCartItem(items[index], items);
+                      return _buildCartItem(items[index], items, index);
                     },
                   );
                 }

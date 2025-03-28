@@ -20,7 +20,6 @@ class _OrderListScreenState extends State<OrderListScreen> {
     _fetchOrders();
   }
 
-  // Hàm lấy danh sách đơn hàng
   Future<void> _fetchOrders() async {
     final url = Uri.parse(
         'https://included-sheepdog-slowly.ngrok-free.app/api/orders/by-user/');
@@ -58,8 +57,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
     }
   }
 
-  // Widget hiển thị từng đơn hàng
-// Widget hiển thị từng đơn hàng
+
   Widget _buildOrderItem(Map<String, dynamic> order) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -118,7 +116,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
       appBar: AppBar(
         title: Text("My Orders"),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())

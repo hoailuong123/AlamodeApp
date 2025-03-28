@@ -93,11 +93,9 @@ class ProductService {
       if (data is Map<String, dynamic> && data.containsKey('results')) {
         results = data['results'];
       }
-      // Nếu phản hồi là một mảng JSON trực tiếp
       else if (data is List) {
         results = data;
       }
-      // Xử lý các định dạng phản hồi không mong đợi
       else {
         throw Exception('Unexpected API response format');
       }
@@ -108,4 +106,6 @@ class ProductService {
       throw Exception('Failed to load products');
     }
   }
+
+  
 }

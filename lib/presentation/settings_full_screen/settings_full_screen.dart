@@ -1,3 +1,5 @@
+import 'package:alamodeapp/presentation/settings_profile_screen/settings_profile_screen.dart';
+import 'package:alamodeapp/presentation/shipping_address_screen/shipping_address_screen.dart';
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import '../../core/app_export.dart';
@@ -32,9 +34,11 @@ class SettingsFullScreen extends StatelessWidget {
                     child: _buildShippingAddressSection(
                       context,
                       shippingAddressTitle: "Profile",
-                      onTap: () => Navigator.pushNamed(
+                      onPressed: () => Navigator.push(
                         context,
-                        AppRoutes.settingsProfileScreen,
+                        MaterialPageRoute(
+                          builder: (context) => SettingsProfileScreen(),
+                        ),
                       ),
                     ),
                   ),
@@ -44,9 +48,11 @@ class SettingsFullScreen extends StatelessWidget {
                     child: _buildShippingAddressSection(
                       context,
                       shippingAddressTitle: "Shipping Address",
-                      onTap: () => Navigator.pushNamed(
+                      onPressed: () => Navigator.push(
                         context,
-                        AppRoutes.shippingAddressScreen,
+                        MaterialPageRoute(
+                          builder: (context) => ShippingAddressScreen(),
+                        ),
                       ),
                     ),
                   ),
@@ -60,12 +66,12 @@ class SettingsFullScreen extends StatelessWidget {
                     width: double.maxFinite,
                     child: _buildShippingAddressSection(
                       context,
-                      shippingAddressTitle: "About Bi Ro",
+                      shippingAddressTitle: "About À-la-mode",
                     ),
                   ),
                   SizedBox(height: 30.0),
-                  GestureDetector(
-                    onTap: () => showDialog(
+                  TextButton(
+                    onPressed: () => showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return DeletingAccountDialog();
@@ -107,10 +113,10 @@ class SettingsFullScreen extends StatelessWidget {
   Widget _buildShippingAddressSection(
     BuildContext context, {
     required String shippingAddressTitle,
-    Function()? onTap,
+    Function()? onPressed,
   }) {
-    return GestureDetector(
-      onTap: onTap,
+    return TextButton(
+      onPressed: onPressed,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -134,10 +140,10 @@ class SettingsFullScreen extends StatelessWidget {
     BuildContext context, {
     required String currencyTitle,
     required String currencyPrice,
-    Function()? onTap,
+    Function()? onPressed,
   }) {
-    return GestureDetector(
-      onTap: onTap,
+    return TextButton(
+      onPressed: onPressed,
       child: Row(
         children: [
           Text(
