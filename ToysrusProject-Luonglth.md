@@ -1,6 +1,6 @@
-# Toysrus - Ứng dụng Thương Mại Điện Tử Đồ Chơi
+# Ứng dụng Toysrus 
 ## Mục lục
-- [Toysrus - Ứng dụng Thương Mại Điện Tử Đồ Chơi](#toysrus---ứng-dụng-thương-mại-điện-tử-đồ-chơi)
+- [Ứng dụng Toysrus](#ứng-dụng-toysrus)
   - [Mục lục](#mục-lục)
   - [1. Giới thiệu tổng quan](#1-giới-thiệu-tổng-quan)
   - [2. Chức năng chính của ứng dụng](#2-chức-năng-chính-của-ứng-dụng)
@@ -15,7 +15,7 @@
 ---
 ## 1. Giới thiệu tổng quan
 
-*Toysrus là một dự án thương mại điện tử dành riêng cho đồ chơi trẻ em, giúp người dùng dễ dàng tiếp cận chương trình khuyến mãi, chiến dịch, lưu mã giảm giá, tích điểm hội viên, mua sắm và quản lý đơn hàng..*
+*Toysrus là một dự án dành cho đồ chơi trẻ em, giúp người dùng dễ dàng tiếp cận chương trình khuyến mãi, chiến dịch, lưu mã giảm giá, tích điểm hội viên, liên kết đến web để mua sắm và theo dõi đơn hàng.*
 
 ---
 ## 2. Chức năng chính của ứng dụng
@@ -42,7 +42,6 @@
  🏷️ **Xem vị trí trên bản đồ**
 - Xem các cửa hàng gần vị trí hiện tại
 - Tìm kiếm các cửa hàng với bộ lọc
-- Chỉ đường đến cửa hàng khi chuyển qua bản đồ của OS
 
  🏷️ **Nhận thông báo**
 - Nhận thông báo về coupon, tin tức
@@ -100,6 +99,7 @@ ma2-a0231-android-toysrus/
 ## 4. Project Pattern
 Dự án tuân theo mô hình **MVVM (Model-View-ViewModel)**:
 - **Model:** Model biểu diễn dữ liệu và logic nghiệp vụ của ứng dụng. Nó bao gồm các lớp dữ liệu, kho lưu trữ và nguồn dữ liệu.
+
 - **View:** View chịu trách nhiệm hiển thị dữ liệu cho người dùng và xử lý các tương tác của người dùng. Nó bao gồm các hoạt động, đoạn mã và tệp bố cục XML.
 - **ViewModel:** ViewModel đóng vai trò là cầu nối giữa Model và View. Nó chứa dữ liệu và logic nghiệp vụ mà View yêu cầu và xử lý các hành động của người dùng.
 
