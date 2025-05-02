@@ -1,18 +1,19 @@
+import 'package:alamodeapp/presentation/payment_screen/widgets/payment_method_popup.dart';
 import 'package:alamodeapp/presentation/payment_screen/widgets/payment_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'widgets/shipping_address_popup.dart';
-import 'widgets/contact_information_popup.dart';
-import 'widgets/payment_method_popup.dart';
+import '/presentation/payment_screen/widgets/shipping_address_popup.dart';
+import '/presentation/payment_screen/widgets/contact_information_popup.dart';
+import '/presentation/payment_screen/widgets/payment_popup.dart';
 import '../../../widgets/custom_elevated_button.dart';
 import '../../../theme/custom_text_style.dart';
 import '../../../core/app_export.dart';
-import 'widgets/list_product.dart';
+import '/presentation/payment_screen/widgets/list_product.dart';
 
-class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({
+class BuyNowScreen extends StatefulWidget {
+  const BuyNowScreen({
     Key? key,
     required this.cartItems,
     required this.totalAmount,
@@ -24,10 +25,10 @@ class PaymentScreen extends StatefulWidget {
   final double totalAmount;
 
   @override
-  State<PaymentScreen> createState() => _PaymentScreenState();
+  State<BuyNowScreen> createState() => _BuyNowScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
+class _BuyNowScreenState extends State<BuyNowScreen> {
   String _country = "Vietnam";
   String _city = "Da Nang";
   String _address = "Ori Garden LakeSide";
@@ -45,39 +46,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchCartItems(); 
-    _cartItems = widget.cartItems; 
-    _totalAmount = _calculateTotal(_cartItems); 
-    
-  }
-
-  Future<void> _fetchCartItems() async {
-    final url = Uri.parse(
-        'https://included-sheepdog-slowly.ngrok-free.app/api/cart/detail/');
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('access_token');
-
-    if (token == null) return;
-
-    try {
-      final response = await http.get(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        setState(() {
-          _cartItems = jsonData['items'];
-        });
-      }
-    } catch (e) {
-      print("Error fetching cart items: $e");
+    if (widget.buyNowProduct != null) {
+      // "Buy Now" scenario
+      _cartItems = [widget.buyNowProduct!];
+      _totalAmount = _calculateTotal(_cartItems);
+    } else {
+      // "Pay Now" scenario (from cart)
+      _cartItems = widget.cartItems;
+      _totalAmount = widget.totalAmount;
     }
-    if (_cartItems.isNotEmpty) return;
   }
 
   Future<void> _createOrder() async {
@@ -94,12 +71,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
     // Tạo payload đơn hàng
     final Map<String, dynamic> payload = {
       "customer": 1,
-      "subtotal_price": _calculateTotal(_cartItems),
+      "subtotal_price": _totalAmount,
       "shipping_cost": _selectedShippingOption == "Express" ? 24 : 12,
       "discount_amount": 0,
       "tax_amount": 0,
-      "total_price": _calculateTotal(_cartItems) +
-          (_selectedShippingOption == "Express" ? 12 : 0),
+      "total_price":
+          _totalAmount + (_selectedShippingOption == "Express" ? 12 : 0),
       "total_weight": 0,
       "shipping_address": 1,
       "billing_address": 1,
@@ -107,24 +84,36 @@ class _PaymentScreenState extends State<PaymentScreen> {
       "payment_method": _selectedPaymentMethod == "MasterCard ****1579"
           ? "CREDIT_CARD"
           : "COD",
-      "note": ""
+      "note": "",
+      "items": widget.buyNowProduct != null
+          ? [
+              {
+                "product": widget.buyNowProduct!['product'],
+                "quantity": widget.buyNowProduct!['quantity'],
+                "price": widget.buyNowProduct!['price'],
+                "total_price": (widget.buyNowProduct!['price'] *
+                        widget.buyNowProduct!['quantity'])
+                    .toStringAsFixed(2),
+                "size": widget.buyNowProduct!['size'] ?? "",
+                "color": widget.buyNowProduct!['color'] ?? "",
+                "productName": widget.buyNowProduct!['product_name'] ?? "",
+                "main_image": widget.buyNowProduct!['image'] ?? "",
+              }
+            ]
+          : _cartItems.map((product) {
+              return {
+                "product": product['product'],
+                "quantity": product['quantity'],
+                "price": product['price'],
+                "total_price":
+                    (product['price'] * product['quantity']).toStringAsFixed(2),
+                "size": product['size'] ?? "",
+                "color": product['color'] ?? "",
+                "productName": product['product_name'] ?? "",
+                "main_image": product['image'] ?? "",
+              };
+            }).toList(),
     };
-
-    if (_cartItems.isNotEmpty) {
-      payload["items"] = _cartItems.map((product) {
-        return {
-          "product": product['product'],
-          "quantity": product['quantity'].toString(),
-          "price": (product['price'] as num?)?.toStringAsFixed(2) ?? "0.00",
-          "total_price": ((product['price'] as num?) ?? 0.0) *
-              (product['quantity'] as int? ?? 0),
-          "size": product['size'] ?? "",
-          "color": product['color'] ?? "",
-          "productName": product['product_name'] ?? "",
-          "main_image": product['image'] ?? "",
-        };
-      }).toList();
-    }
 
     print("Payload: $payload");
 
@@ -316,7 +305,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text("Total", style: CustomTextStyles.titleMediumBlack900),
-        Text("\$${total.toStringAsFixed(2)}", // Tổng tiền
+        Text("\$${total.toStringAsFixed(2)}",
             style: CustomTextStyles.titleMediumBlack900),
       ],
     );

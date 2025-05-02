@@ -20,7 +20,8 @@ class LoginScreen extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       try {
         final response = await http.post(
-          Uri.parse('https://included-sheepdog-slowly.ngrok-free.app/api/login'),
+          Uri.parse(
+              'https://included-sheepdog-slowly.ngrok-free.app/api/login'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'username': username, 'password': password}),
         );
@@ -53,39 +54,37 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          width: double.maxFinite,
-          height: SizeUtils.height,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.onErrorContainer,
-            image: DecorationImage(
-              image: AssetImage(
-                ImageConstant.imgLogin,
-              ),
-              fit: BoxFit.fill,
+    return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        width: double.maxFinite,
+        height: SizeUtils.height,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.onErrorContainer,
+          image: DecorationImage(
+            image: AssetImage(
+              ImageConstant.imgLogin,
             ),
+            fit: BoxFit.fill,
           ),
-          child: SizedBox(
-            height: SizeUtils.height,
-            child: Form(
-              key: _formKey,
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20.h,
-                  vertical: 68.h,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Spacer(),
-                    _buildLoginFormSection(context),
-                  ],
-                ),
+        ),
+        child: SizedBox(
+          height: SizeUtils.height,
+          child: Form(
+            key: _formKey,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 20.h,
+                vertical: 68.h,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Spacer(),
+                  _buildLoginFormSection(context),
+                ],
               ),
             ),
           ),
@@ -178,12 +177,12 @@ class LoginScreen extends StatelessWidget {
             height: 60.h,
             buttonStyle: CustomButtonStyles.fillGray,
             buttonTextStyle: CustomTextStyles.titleMediumIndigo200,
-            onPressed: () => {
-              Navigator.pushNamed(context, AppRoutes.startScreen)
-            },
+            onPressed: () =>
+                {Navigator.pushNamed(context, AppRoutes.startScreen)},
           )
         ],
       ),
     );
   }
+  
 }

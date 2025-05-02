@@ -37,14 +37,17 @@ class ShopInitialPageState extends State<ShopInitialPage> {
   late Future<List<ProductModel>> _recommendedProductsFuture;
   late Future<List<ProductModel>> _newItemsFuture;
   late Future<List<ProductModel>> _flashSaleFuture;
+  Future<List<ProductModel>>? _searchProductsFuture;
 
   @override
   void initState() {
     super.initState();
-     _newItemsFuture = _productService.fetchNearestProducts(limit: 5);
+    _newItemsFuture = _productService.fetchNearestProducts(limit: 5);
     _flashSaleFuture = _productService.fetchSaleProducts(limit: 6);
-    _recommendedProductsFuture = _productService.fetchProducts(pageSize: 10, page: 1);
+    _recommendedProductsFuture =
+        _productService.fetchProducts(pageSize: 10, page: 1);
   }
+
 
   Widget build(BuildContext context) {
     return Container(
@@ -62,24 +65,26 @@ class ShopInitialPageState extends State<ShopInitialPage> {
             child: SingleChildScrollView(
               child: SizedBox(
                 width: double.maxFinite,
-                child: Column(
-                  children: [
-                    SizedBox(height: 8.h),
-                    _buildBigSaleBanner(context),
-                    SizedBox(height: 18.h),
-                    GridCategories(),
-                    // SizedBox(height: 28.h),
-                    SizedBox(height: 48.h),
-                    _buildNewItemsSection(context),
-                    SizedBox(height: 24.h),
-                    _buildFlashSaleSection(context),
-                    SizedBox(height: 24.h),
-                    // SizedBox(height: 26.h),
-                    _buildRowtitlenine(context),
-                    SizedBox(height: 10.h),
-                    _buildRecommendedProductsGrid(context)
-                  ],
-                ),
+                child: searchController.text.isEmpty
+                    ? Column(
+                        children: [
+                          SizedBox(height: 8.h),
+                          _buildBigSaleBanner(context),
+                          SizedBox(height: 18.h),
+                          // GridCategories(),
+                          // SizedBox(height: 28.h),
+                          SizedBox(height: 48.h),
+                          _buildNewItemsSection(context),
+                          SizedBox(height: 24.h),
+                          _buildFlashSaleSection(context),
+                          SizedBox(height: 24.h),
+                          // SizedBox(height: 26.h),
+                          _buildRowtitlenine(context),
+                          SizedBox(height: 10.h),
+                          _buildRecommendedProductsGrid(context)
+                        ],
+                      )
+                    : _buildSearchResults(),
               ),
             ),
           ),
@@ -113,16 +118,6 @@ class ShopInitialPageState extends State<ShopInitialPage> {
             left: 12.h,
             bottom: 4.h,
           ),
-          // child: CustomIconButton(
-          //   height: 30.h,
-          //   width: 30.h,
-          //   padding: EdgeInsets.all(6.h),
-          //   decoration: IconButtonStyleHelper.fillPrimary,
-          //   alignment: Alignment.center,
-          //   // child: CustomImageView(
-          //   //   imagePath: ImageConstant.imgArrow,
-          //   // ),
-          // ),
         )
       ],
     );
@@ -132,10 +127,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
       title: Padding(
-        padding: EdgeInsets.only(
-          left: 20.h,
-          right: 19.h,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 19.h),
         child: Row(
           children: [
             AppbarTitle(
@@ -144,10 +136,7 @@ class ShopInitialPageState extends State<ShopInitialPage> {
             ),
             Expanded(
               child: AppbarTitleSearchviewThree(
-                margin: EdgeInsets.only(
-                  left: 19.h,
-                  bottom: 2.h,
-                ),
+                margin: EdgeInsets.only(left: 19.h, bottom: 2.h),
                 hintText: "Search",
                 controller: searchController,
               ),
@@ -155,6 +144,50 @@ class ShopInitialPageState extends State<ShopInitialPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSearchResults() {
+    if (_searchProductsFuture == null) {
+      return SizedBox.shrink();
+    }
+
+    return FutureBuilder<List<ProductModel>>(
+      future: _searchProductsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Failed to load search results.'));
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          final products = snapshot.data!;
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return ListTile(
+                leading: product.mainImage != null
+                    ? Image.network(product.mainImage!)
+                    : Container(),
+                title: Text(product.name),
+                subtitle: Text('Price: \$${product.price}'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProductScreen(productid: product.id),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        }
+        return Center(child: Text('No results found.'));
+      },
     );
   }
 
@@ -206,8 +239,6 @@ class ShopInitialPageState extends State<ShopInitialPage> {
       ),
     );
   }
-
-
 
   /// Section Widget: New Items
   Widget _buildNewItemsSection(BuildContext context) {

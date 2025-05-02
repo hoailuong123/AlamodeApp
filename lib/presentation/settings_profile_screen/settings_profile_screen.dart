@@ -1,3 +1,4 @@
+import 'package:alamodeapp/services/category_service.dart';
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import '../../core/app_export.dart';
@@ -31,10 +32,18 @@ class SettingsProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 10.h),
-                  Text(
-                    "Settings",
-                    style: theme.textTheme.headlineMedium,
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back, color: Colors.black),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      SizedBox(width: 10.h),
+                      Text(
+                        "Settings",
+                        style: theme.textTheme.headlineMedium,
+                      ),
+                    ],
                   ),
                   SizedBox(height: 6.h),
                   Text(
@@ -59,10 +68,6 @@ class SettingsProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: SizedBox(
-          width: double.maxFinite,
-          child: _buildBottomNavigationBar(context),
         ),
       ),
     );
@@ -129,12 +134,16 @@ class SettingsProfileScreen extends StatelessWidget {
   ///Handling route based on bottom click actions
   String getCurrentRoute(BottomBarEnum type) {
     switch (type) {
-      case BottomBarEnum.loremipsumdolorsitametconsectetur:
+      case BottomBarEnum.home:
         return AppRoutes.shopInitialPage;
-      case BottomBarEnum.loremipsumdolor3:
-        return "/";
+      case BottomBarEnum.cart:
+        return AppRoutes.cartPage;
+      case BottomBarEnum.order:
+        return AppRoutes.orderListScreen;
+      case BottomBarEnum.profile:
+        return AppRoutes.settingsProfileScreen;
       default:
         return "/";
     }
   }
-}
+} 

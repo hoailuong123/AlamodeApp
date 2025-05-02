@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/app_export.dart';
 
-enum BottomBarEnum { loremipsumdolor3, loremipsumdolorsitametconsectetur }
+enum BottomBarEnum { cart, home, order, profile }
 
 class CustomBottomBar extends StatefulWidget {
   CustomBottomBar({this.onChanged});
@@ -19,19 +19,19 @@ class CustomBottomBarState extends State<CustomBottomBar> {
     BottomMenuModel(
         icon: ImageConstant.imgGroup1950,
         activeIcon: ImageConstant.imgGroup1950,
-        type: BottomBarEnum.loremipsumdolorsitametconsectetur),
+        type: BottomBarEnum.home),
     BottomMenuModel(
         icon: ImageConstant.imgBagPrimary,
         activeIcon: ImageConstant.imgBagPrimary,
-        type: BottomBarEnum.loremipsumdolor3),
+        type: BottomBarEnum.cart),
     BottomMenuModel(
         icon: ImageConstant.imgCategories,
         activeIcon: ImageConstant.imgCategories,
-        type: BottomBarEnum.loremipsumdolor3),
+        type: BottomBarEnum.order),
     BottomMenuModel(
         icon: ImageConstant.imgLockPrimary,
         activeIcon: ImageConstant.imgLockPrimary,
-        type: BottomBarEnum.loremipsumdolorsitametconsectetur),
+        type: BottomBarEnum.profile),
   ];
 
   @override

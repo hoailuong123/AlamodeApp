@@ -92,6 +92,6 @@ class AppRoutes {
     paymentScreen: (context) => PaymentScreen(cartItems: [],totalAmount: double.infinity,),
     imageSearchScreen: (context) => SearchImageScreen(),
 
-    initialRoute: (context) => AppNavigationScreen(),
+    initialRoute: (context) => StartScreen(),
   };
 }

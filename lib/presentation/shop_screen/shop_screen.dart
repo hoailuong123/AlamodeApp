@@ -1,3 +1,7 @@
+import 'package:alamodeapp/presentation/cart_page/cart_page.dart';
+import 'package:alamodeapp/presentation/order_list/order_list.dart';
+import 'package:alamodeapp/presentation/settings_full_screen/settings_full_screen.dart';
+import 'package:alamodeapp/presentation/settings_profile_screen/settings_profile_screen.dart';
 import 'package:alamodeapp/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import '../../core/app_export.dart';
@@ -34,7 +38,8 @@ class ShopScreen extends StatelessWidget {
     return CustomBottomBar(
       onChanged: (BottomBarEnum type) {
         String route = getCurrentRoute(type);
-        if (route.isNotEmpty && route != ModalRoute.of(context)?.settings.name) {
+        if (route.isNotEmpty &&
+            route != ModalRoute.of(context)?.settings.name) {
           Navigator.pushNamed(navigatorKey.currentContext!, route);
         }
       },
@@ -44,12 +49,16 @@ class ShopScreen extends StatelessWidget {
   /// Mapping routes for bottom navigation bar
   String getCurrentRoute(BottomBarEnum type) {
     switch (type) {
-      case BottomBarEnum.loremipsumdolorsitametconsectetur:
+      case BottomBarEnum.home:
         return AppRoutes.shopInitialPage;
-      case BottomBarEnum.loremipsumdolor3:
-        return AppRoutes.categoriesFilterScreen; // Example route
+      case BottomBarEnum.cart:
+        return AppRoutes.cartPage;
+      case BottomBarEnum.order:
+        return AppRoutes.orderListScreen;
+      case BottomBarEnum.profile:
+        return AppRoutes.settingsFullScreen; 
       default:
-        return '';
+        return '/';
     }
   }
 
@@ -58,8 +67,12 @@ class ShopScreen extends StatelessWidget {
     switch (currentRoute) {
       case AppRoutes.shopInitialPage:
         return ShopInitialPage();
-      case AppRoutes.categoriesFilterScreen:
-        return CategoriesFilterScreen(); 
+      case AppRoutes.cartPage:
+        return CartScreen();
+      case AppRoutes.orderListScreen:
+        return OrderListScreen();
+      case AppRoutes.settingsFullScreen:
+        return SettingsFullScreen();
       default:
         return Center(
           child: Text(

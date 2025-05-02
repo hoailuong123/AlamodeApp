@@ -3,13 +3,18 @@ import '../../core/app_export.dart';
 import '../custom_search_view.dart';
 
 class AppbarTitleSearchviewThree extends StatelessWidget {
-  AppbarTitleSearchviewThree(
-      {Key? key, this.hintText, this.controller, this.margin})
-      : super(key: key);
+  AppbarTitleSearchviewThree({
+    Key? key,
+    this.hintText,
+    this.controller,
+    this.margin,
+    this.onSubmitted,
+  }) : super(key: key);
 
   final String? hintText;
   final TextEditingController? controller;
   final EdgeInsetsGeometry? margin;
+  final void Function(String)? onSubmitted; 
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +25,7 @@ class AppbarTitleSearchviewThree extends StatelessWidget {
         child: CustomSearchView(
           controller: controller,
           hintText: "Search",
-          contentPadding:
-              EdgeInsets.fromLTRB(54.h, 6.h, 16.h, 6.h),
+          contentPadding: EdgeInsets.fromLTRB(54.h, 6.h, 16.h, 6.h),
         ),
       ),
     );

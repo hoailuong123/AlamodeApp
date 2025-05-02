@@ -32,6 +32,12 @@ class ShippingAddressScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.black),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                   SizedBox(height: 10.h),
                   Text(
                     "Settings",
@@ -68,7 +74,6 @@ class ShippingAddressScreen extends StatelessWidget {
         ),
         bottomNavigationBar: SizedBox(
           width: double.maxFinite,
-          child: _buildBottomNavigationBar(context),
         ),
       ),
     );
@@ -195,31 +200,4 @@ class ShippingAddressScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return SizedBox(
-      width: double.maxFinite,
-      child: CustomBottomBar(
-        onChanged: (BottomBarEnum type) {
-          Navigator.pushNamed(
-            navigatorKey.currentContext!,
-            getCurrentRoute(type),
-          );
-        },
-      ),
-    );
-  }
-
-  ///Handling route based on bottom click actions
-  String getCurrentRoute(BottomBarEnum type) {
-    switch (type) {
-      case BottomBarEnum.loremipsumdolorsitametconsectetur:
-        return AppRoutes.shopInitialPage;
-      case BottomBarEnum.loremipsumdolor3:
-        return "/";
-      default:
-        return "/";
-    }
-  }
 }
-/// Section Widget

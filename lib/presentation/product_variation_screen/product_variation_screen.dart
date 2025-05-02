@@ -1,5 +1,6 @@
 import 'package:alamodeapp/core/app_export.dart';
 import 'package:alamodeapp/presentation/payment_screen/payment_screen.dart';
+import 'package:alamodeapp/presentation/product_variation_screen/widgets/buy_now_screen.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -329,7 +330,7 @@ class _ProductVariationScreenState extends State<ProductVariationScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PaymentScreen(
+                    builder: (context) => BuyNowScreen(
                       cartItems: [selectedProduct],
                       totalAmount: totalAmount,
                     ),
